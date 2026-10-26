@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Резюме · Лада Белык</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: the main page's dark card column, one card per résumé section */
+:root {
+  --ground: #0D0D09;
+  --card: #121212;
+  --line: #2A2A26;
+  --fg: #FFFFFF;
+  --text: #B4B4B0;
+  --accent: #FF7542;
+  --font: "Onest", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ground); color: var(--text); font-family: var(--font); font-weight: 300; font-size: 16px; line-height: 1.45; }
+h1, h2, h3, p, ul { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(13,13,9,.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
+.top-in { max-width: 1016px; margin: 0 auto; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top a { text-decoration: none; color: var(--fg); font-size: 16px; }
+.top a:hover { color: var(--accent); }
+.top .who { color: var(--text); font-size: 15px; margin-right: auto; }
+.top-in { gap: 24px; }
+.top a.dl { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-size: 16px; white-space: nowrap; transition: text-shadow .2s; }
+.top a.dl svg { width: 18px; height: 18px; }
+.top a.dl:hover { color: var(--accent); text-shadow: 0 0 12px rgba(255,117,66,.6); }
+.dl-note { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 20; max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 14px; background: #1E1E1C; border: 1px solid var(--line); color: var(--fg); font-size: 14px; }
+@media (max-width: 600px) { .top .who { display: none; } .top-in { justify-content: space-between; } }
+
+.wrap { max-width: 1016px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 56px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 26px; --pad: clamp(22px, 4vw, 40px); padding: var(--pad); min-width: 0; }
+/* Equal space above, below and left of the text: trim the line-height leading on the first and last lines */
+.card > :first-child { text-box: trim-start cap alphabetic; }
+.card > :last-child { text-box: trim-end cap alphabetic; }
+@supports not (text-box: trim-both cap alphabetic) {
+  .card { padding-top: calc(var(--pad) - 6px); padding-bottom: calc(var(--pad) - 5px); }
+}
+
+.card > h2 { color: var(--fg); font-size: clamp(22px, 2.4vw, 28px); font-weight: 400; margin-bottom: 20px; }
+
+.job { color: var(--fg); font-weight: 500; }
+.job + p { margin-top: 2px; }
+.group + .group { margin-top: 40px; }
+.items { list-style: none; padding: 0; margin-top: 24px; }
+.items > li { padding-block: 20px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.items > li:first-child { border-top: 0; padding-top: 0; }
+.items h3 { color: var(--fg); font-size: 16px; font-weight: 500; }
+.items h3 a { text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.items p { max-width: 80ch; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--accent); font-size: 15px; text-shadow: 0 0 12px rgba(255,117,66,.45); }
+
+.arrows { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.arrows li::before { content: "→ "; }
+.sub { color: var(--fg); font-weight: 500; }
+.tg { color: var(--accent); text-decoration: none; }
+.tg:hover { text-shadow: 0 0 12px rgba(255,117,66,.6); }
+
+.dip-btn { margin-top: 16px; display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 18px 0 14px; border: 1px solid var(--line); border-radius: 13px; background: transparent; color: var(--fg); font: 400 15px var(--font); cursor: pointer; transition: border-color .2s, box-shadow .25s, color .2s; }
+.dip-btn svg { width: 20px; height: 20px; color: var(--accent); }
+.dip-btn:hover, .dip-btn:focus-visible { border-color: var(--accent); box-shadow: 0 0 18px rgba(255,117,66,.35); }
+.dip { width: min(1040px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 22px; background: var(--card); color: var(--text); overflow: auto; }
+.dip::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(4px); }
+.dip-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 16px 16px 24px; border-bottom: 1px solid var(--line); }
+.dip-head b { color: var(--fg); font-weight: 500; }
+.dip-close { width: 40px; height: 40px; border: 0; border-radius: 12px; background: #1E1E1C; color: var(--fg); font-size: 22px; line-height: 1; cursor: pointer; }
+.dip-close:hover { background: var(--accent); }
+.dip-body { padding: 20px; }
+.dip-body img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.dip-empty { padding: 48px 16px; text-align: center; border: 1px dashed var(--line); border-radius: 12px; }
+@media (prefers-reduced-motion: reduce) { .dip-btn { transition: none; } }
+@media (max-width: 600px) { body { font-size: 15px; } .wrap { padding-block: 20px 40px; gap: 12px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in"><a href="index.html">← На главную</a><span class="who">Лада Белык · UI/UX-дизайнер</span><a class="dl" id="dl" href="resume.pdf" download="Лада_Белык_UI-UX.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>скачать резюме</a></div></header>
+
+<main class="wrap">
+  <section class="card">
+    <h2>О себе</h2>
+    <p>Однажды я заметила, что менеджеры каждый день отвечают клиентам на одни и те же вопросы. С тех пор ищу в интерфейсах места, где человек спотыкается, — и убираю их.</p>
+  </section>
+
+  <section class="card">
+    <h2>Профессиональный опыт</h2>
+
+    <div class="group">
+      <p class="job">Графический дизайнер · Ротоснаб · 2024 — 2026 г.</p>
+      <p>B2B-производственная компания: пресс-формы, литьё пластмасс, собственные продукты.</p>
+      <ul class="items">
+        <li>
+          <h3>[1] Редизайн корпоративного сайта · 3 месяца</h3>
+          <p>Сайт был каталогом оборудования и не отвечал на вопросы клиентов, поэтому их разбирали менеджеры. Я собрала частые вопросы клиентов и то, что компания хотела показать, и вместе с SEO-специалистом построила карту сайта. Так появился многостраничный сайт с сеткой отраслей, разделом кейсов, карточками менеджеров с прямыми контактами и выходом в мессенджер для тех, у кого нет 3D-модели. Решения согласовывала с командой из пяти человек. Итог: сайт запущен.</p>
+          <p class="tags"><span>#исследование</span><span>#информационная архитектура</span><span>#UI</span></p>
+        </li>
+        <li>
+          <h3>[2] Блок «Этапы сотрудничества»</h3>
+          <p>Клиенты не понимали, как устроена работа с компанией. Делая КП, я увидела, какие вопросы о процессе повторяются, и перенесла ответ на них в интерфейс: на сайте появился таймлайн этапов.</p>
+          <p class="tags"><span>#UX</span><span>#B2B</span></p>
+        </li>
+        <li>
+          <h3>[3] База знаний для новых сотрудников на Битриксе</h3>
+          <p>Новым сотрудникам нужна была одна точка входа в знания компании. Я упаковала всю базу знаний в единый интерфейс на Битриксе.</p>
+          <p class="tags"><span>#информационная архитектура</span><span>#онбординг</span><span>#UI</span></p>
+        </li>
+        <li>
+          <h3>[4] Project Plast: мероприятие от идеи до сайта регистрации</h3>
+          <p>Отраслевое B2B-мероприятие нужно было создать с нуля. Я выстроила единую систему от названия, логотипа и фирменного стиля до сайта регистрации и раздаточных материалов, чтобы участник видел одно мероприятие на всех этапах, от регистрации до площадки.</p>
+          <p class="tags"><span>#айдентика → UI</span><span>#лендинг</span><span>#путь пользователя</span></p>
+        </li>
+        <li>
+          <h3>[5] Сайт РСАГРО · поддержка</h3>
+          <p>Вела сайт на поддержке: собрала интерфейс карточки товара и блок каталога, чтобы клиент мог быстро найти товар и посмотреть его характеристики.</p>
+          <p class="tags"><span>#e-commerce</span><span>#UI</span><span>#поддержка сайта</span></p>
+        </li>
+        <li>
+          <h3>[6] Лендинг продукта MES-диспетчер · 1,5 месяца</h3>
+          <p>Продукт нельзя было показать клиенту, только описать словами. Я разобрала проблемы производства с разработчиком и гендиректором и, когда их позиции разошлись, нашла вариант, который учёл обе: акцент на IT перенесла в визуал, а экраны показала только ключевые. Так получился лендинг по логике «проблема → функция». Макет готов, но компания сменила фокус.</p>
+          <p class="tags"><span>#стейкхолдеры</span><span>#UX-логика</span><span>#UI</span></p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <p class="job">Фриланс · 2021 — 2026 г.</p>
+      <ul class="items">
+        <li>
+          <h3>[1] berezka-payments · Мобильный банк: экраны переводов · 2024 г.</h3>
+          <p>Нужно было превратить готовый прототип в UI экранов переводов мобильного банка. Опираясь на путь клиента и брендбук, я оформила страницы так, чтобы визуал поддерживал сценарий перевода и соответствовал бренду.</p>
+          <p class="tags"><span>#мобильный UI</span><span>#финтех</span><span>#работа по прототипу</span></p>
+        </li>
+        <li>
+          <h3>[2] ILC (InterLogCon) · Айдентика и визуальные системы · 2022 г.</h3>
+          <p>Компании нужен был новый визуальный образ. Я прошла путь от логотипа к фирменному стилю, проверила систему на мерче и зафиксировала её в брендбуке, чтобы компания могла применять стиль сама. Логотип сейчас используется на сайте компании, а фирменный стиль и брендбук — во внутренних материалах.</p>
+          <p class="tags"><span>#айдентика</span><span>#визуальная система</span><span>#брендбук</span></p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Программы</h2>
+    <ul class="arrows">
+      <li>Figma</li>
+      <li>Tilda (basic)</li>
+      <li>Adobe: Illustrator / Photoshop / After Effects</li>
+      <li>AI: ChatGPT / Claude / Gemini / Syntx AI / Recraft</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Образование</h2>
+    <p class="sub">Графический дизайнер</p>
+    <p>→ ГБПОУ г. Москвы «Московский техникум креативных индустрий им. Л.Б. Красина», 2019–2023 г.</p>
+  </section>
+
+  <section class="card">
+    <h2>Дополнительное образование</h2>
+    <p class="sub">Нейросети для дизайна</p>
+    <p>→ Яндекс Практикум, 2025 г.</p>
+    <button class="dip-btn" type="button" id="dipOpen" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><circle cx="12" cy="13" r="2.5"/><path d="M10.5 15.2 9.5 19l2.5-1.2 2.5 1.2-1-3.8"/></svg>смотреть диплом</button>
+  </section>
+
+  <section class="card">
+    <h2>Личные качества</h2>
+    <ul class="items">
+      <li><h3>[1] Довожу задачу от анализа до UI</h3><p>→ Лендинг MES-диспетчера сделала одна: от разбора проблем производства до текстов и интерфейса. Команде не нужно передавать задачу между людьми.</p></li>
+      <li><h3>[2] Нахожу решение между разными позициями</h3><p>→ Гендиректор и разработчик расходились в том, что показать на лендинге, и я нашла вариант, который учёл обе позиции. Решения проходят согласование быстрее.</p></li>
+      <li><h3>[3] Держу систему</h3><p>→ Без UI-кита собрала интерфейс сайта на основе брендбука. Интерфейс остаётся целостным, когда растёт.</p></li>
+      <li><h3>[4] Вижу проблему за задачей</h3><p>→ Из вопросов клиентов в КП появился блок этапов на сайте. Я решаю не только то, что поставили, но и то, что мешает пользователю.</p></li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Интересы</h2>
+    <ul class="items">
+      <li><h3>[1] AI в дизайне</h3><p>→ Использую генерацию в связке с ручной доработкой, так я делала 3D-визуал для лендинга MES.</p></li>
+      <li><h3>[2] Дизайн-конференции и выставки</h3><p>→ Регулярно хожу за насмотренностью и свежими идеями для визуальных решений.</p></li>
+      <li><h3>[3] Тяжёлая атлетика</h3>
+        <ul class="arrows"><li>1 место — в/к до 70 кг, 2026 г.</li><li>3 место — в/к до 77 кг, 2026 г.</li><li>1 место — двоеборье среди мужчин-пауэрлифтеров, 2026 г.</li></ul>
+        <p>Спорт научил меня системному подходу: результат складывается из плана, дисциплины и регулярной работы над техникой.</p></li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Контакты:</h2>
+    <p>тел: +7(925) 134 80 41<br>telegram: <a class="tg" href="https://t.me/oladyshekb" target="_blank" rel="noopener">@oladyshekb</a></p>
+  </section>
+</main>
+<dialog class="dip" id="dip" aria-label="Диплом «Нейросети для дизайна»">
+  <div class="dip-head"><b>Диплом · Нейросети для дизайна, Яндекс Практикум</b><button class="dip-close" type="button" id="dipClose" aria-label="Закрыть">×</button></div>
+  <div class="dip-body"><img id="dipImg" src="diploma.jpg" alt="Диплом Яндекс Практикума «Нейросети для дизайна»"><p class="dip-empty" id="dipEmpty" hidden>Скан диплома скоро появится здесь.</p></div>
+</dialog>
+<p class="dl-note" id="dlNote" role="status" hidden></p>
+<script>
+/* Download the PDF résumé through the viewer's save prompt; if saving is not available here, the link opens the PDF instead */
+(function () {
+  var link = document.getElementById('dl'), note = document.getElementById('dlNote'), timer;
+  function say(t) { note.textContent = t; note.hidden = false; clearTimeout(timer); timer = setTimeout(function () { note.hidden = true; }, 3000); }
+  var dlp = (window.claude && window.claude.use) ? window.claude.use('downloads') : Promise.resolve(null);
+  if (!(window.claude && window.claude.use)) return; /* on a normal website the link downloads the PDF itself */
+  link.addEventListener('click', function (e) {
+    e.preventDefault();
+    dlp.then(function (dl) {
+      if (!dl) { window.location.href = 'resume.pdf'; return; }
+      return fetch('resume.pdf').then(function (r) { return r.blob(); }).then(function (blob) {
+        return dl.save({ filename: 'Лада_Белык_UI-UX.pdf', data: blob });
+      }).then(function () { say('Резюме скачано'); }, function (err) {
+        if (err && err.code === 'declined') return;
+        if (err && err.code === 'rate_limited') { say('Подождите секунду и нажмите ещё раз'); return; }
+        window.location.href = 'resume.pdf';
+      });
+    });
+  });
+})();
+(function () {
+  var d = document.getElementById('dip'), img = document.getElementById('dipImg'), empty = document.getElementById('dipEmpty');
+  img.addEventListener('error', function () { img.hidden = true; empty.hidden = false; });
+  document.getElementById('dipOpen').addEventListener('click', function () { d.showModal(); });
+  document.getElementById('dipClose').addEventListener('click', function () { d.close(); });
+  d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+})();
+</script>
+</body>
+</html>
