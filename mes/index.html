@@ -1,0 +1,242 @@
+<!doctype html><html lang="ru"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Кейс: MES-диспетчер</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@700&display=swap">
+<style>
+/* Phone cover: the cover picture is replaced by a stacked layout (text → buttons → visual → facts as tiles) */
+.mcov { display: none; }
+@media (max-width: 700px) {
+  #top > img, #top > .cvbar, #top > .cvbtns { display: none !important; }
+  .mcov { display: flex; flex-direction: column; background: linear-gradient(160deg, #111315, #0E1A1F); color: #FFFFFF; font-family: var(--font); padding: 28px 18px 18px; border-radius: 24px; overflow: hidden; }
+  .mc-eye { margin: 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: #E8EBEF; }
+  .mc-eye span { color: #9EA5AE; }
+  .mc-h { margin: 16px 0 0; font-size: clamp(30px, 9vw, 40px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+  .mc-lede { margin: 16px 0 0; font-size: 17px; line-height: 1.4; color: #A9B0BA; }
+  .mc-lede b { color: #FFFFFF; font-weight: 500; }
+  .mc-btns { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .mc-btns .cb { width: 100%; min-width: 0; height: 54px; font-size: 18px; border-radius: 13px; }
+  .mc-vis { display: block; width: calc(100% + 16px); max-width: none; height: auto; margin: 24px -8px 0; }
+  .mc-meta { margin: 24px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .mc-meta div { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); min-width: 0; }
+  .mc-meta dt { font-size: 15px; color: #9EA5AE; }
+  .mc-meta dd { margin: 10px 0 0; font-size: 17px; line-height: 1.3; color: #FFFFFF; }
+}
+</style>
+
+<style>
+/* Cover buttons: same pair on every case cover, matching the portfolio main page */
+.cb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: clamp(30px, 4.5cqw, 51px); min-width: clamp(120px, 22.9cqw, 259px); padding: 0 1.2em; border-radius: clamp(8px, 1.15cqw, 13px); font: 400 clamp(11px, 1.5cqw, 17px) var(--font); text-decoration: none; white-space: nowrap; border: 1px solid #FFFFFF; transition: background-color .2s, color .2s, border-color .2s, box-shadow .25s; }
+.cb-fill { background: #FFFFFF; color: #121212; }
+.cb-line { background: transparent; color: #FFFFFF; }
+.cb:hover, .cb:focus-visible { background: #00ACF9; border-color: #00ACF9; color: #FFFFFF; box-shadow: 0 0 24px rgba(0,172,249,.55), 0 0 6px rgba(0,172,249,.75); outline: none; }
+@media (prefers-reduced-motion: reduce) { .cb { transition: none; } }
+#top { container-type: inline-size; }
+.cvbar { position: absolute; left: 4.8%; top: 49%; width: 50.5%; height: 11%; background: linear-gradient(90deg, #111111 55%, #11181A); }
+.cvbtns { position: absolute; left: 5.4%; top: 54.5%; transform: translateY(-50%); display: flex; gap: clamp(8px, 1.3cqw, 14px); }
+</style>
+<script>
+/* Open every case at its cover, not wherever the previous page was scrolled */
+(function () {
+  try { history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) return;
+  var top = function () { window.scrollTo(0, 0); };
+  top(); document.addEventListener('DOMContentLoaded', top); window.addEventListener('load', top);
+})();
+</script>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap">
+<style>
+/* Layout: fixed white menu over a light page; the case blocks are 1130px cards stacked with 20px gaps (single light look, as in the case) */
+:root {
+  --bg: #F1F4F9;
+  --nav: #FFFFFF;
+  --nav-line: #C9CCDA;
+  --text: #4A4D5A;
+  --blue: #00ACF9;
+  --blue-hover: #0098DC;
+  --toast-bg: #18191C;
+  --font: "Onest", "Helvetica Neue", Arial, sans-serif;
+  --nav-h: 75px;
+  color-scheme: light;
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--text); font-family: var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--nav); }
+
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--nav); border-bottom: 1px solid var(--nav-line); }
+.nav-inner {
+  height: var(--nav-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 1100px) { .nav-inner { padding-left: max(52px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); } }
+.all { justify-self: start; color: var(--blue); text-decoration: none; font-size: 16px; }
+.all:hover { color: var(--blue-hover); }
+.menu { display: flex; gap: 8px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.menu::-webkit-scrollbar { display: none; }
+.menu a { flex: 0 0 auto; padding: 8px 8px; color: var(--text); text-decoration: none; font-size: 16px; white-space: nowrap; border-radius: 8px; transition: color .2s; }
+.menu a:hover { color: var(--blue); }
+.menu a.active { color: var(--blue); }
+.cta {
+  justify-self: end; display: inline-flex; text-decoration: none; align-items: center; justify-content: center; height: 51px; min-width: 259px; padding: 0 32px; box-sizing: border-box;
+  border: 0; border-radius: 12px; background: var(--blue); color: #FFFFFF; font: 500 17px var(--font); cursor: pointer; white-space: nowrap;
+}
+.cta:hover { background: var(--blue-hover); }
+.all:focus-visible, .menu a:focus-visible, .cta:focus-visible, .hot:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+main {
+  max-width: 1130px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 70px 100px;
+}
+@media (min-width: 1162px) { main { padding-left: 0; padding-right: 0; } }
+section { position: relative; scroll-margin-top: calc(var(--nav-h) + 20px); }
+section img { display: block; width: 100%; height: auto; }
+.hot { position: absolute; display: block; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 14px; }
+.hot:hover { background: rgba(255,255,255,.08); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px);
+  max-width: calc(100% - 32px); padding: 14px 20px; border-radius: 14px; background: var(--toast-bg); color: #FFFFFF; font-size: 15px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 860px) {
+  :root { --nav-h: 60px; }
+  .nav-inner { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; }
+  .all, .menu a, .cta { font-size: 14px; }
+  .cta { height: 38px; min-width: 0; padding: 0 14px; border-radius: 10px; }
+  main { padding-block: 24px 48px; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .menu a, .toast { transition: none; } }
+</style>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="all" href="../index.html#cases">← Все кейсы</a>
+    <nav class="menu" aria-label="Разделы кейса">
+      <a href="#context">Контекст</a>
+      <a href="#research">Исследование</a>
+      <a href="#scenario">Сценарий</a>
+      <a href="#solution">Решение</a>
+      <a href="#ui">UI и итог</a>
+    </nav>
+    <a class="cta" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a>
+  </div>
+</header>
+
+<main>
+  <section id="top">
+    <img src="img/0_cover.webp" width="1130" height="642" alt="Кейс MES-диспетчер: как объяснить сложный B2B-продукт тем, кто его ещё не видел. Роль, состав работ, срок 1,5 месяца, статус.">
+    <div class="cvbar" aria-hidden="true"></div>
+    <div class="cvbtns"><a class="cb cb-fill" href="#solution">Смотреть решение</a><a class="cb cb-line" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a></div>
+    <div class="mcov">
+      <p class="mc-eye">Кейс: MES-диспетчер <span>· веб · B2B-продукт</span></p>
+      <p class="mc-h">Как объяснить сложный B2B-продукт тем, кто его ещё не видел</p>
+      <p class="mc-lede">Путь от <b>проблем производства</b> к <b>функциям системы</b></p>
+      <div class="mc-btns"><a class="cb cb-fill" href="#solution">Смотреть решение</a><a class="cb cb-line" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a></div>
+      <img class="mc-vis" src="img/cover_devices.webp" alt="" loading="lazy">
+      <dl class="mc-meta"><div><dt>Роль</dt><dd>UI/UX-дизайнер, весь проект в одиночку</dd></div><div><dt>Что сделала</dt><dd>Анализ, структура, тексты, UI, 3D-визуалы</dd></div><div><dt>Срок</dt><dd>1,5 месяца</dd></div><div><dt>Статус</dt><dd>Готов к запуску</dd></div></dl>
+    </div>
+  </section>
+  <section id="context"><img src="img/1_context.webp" width="1130" height="1583" loading="lazy" alt="Контекст и задача: был интерфейс программы, но не было пути к клиенту. Путь продажи, ограничения, три роли."></section>
+  <section id="research"><img src="img/2_research.webp" width="1130" height="2126" loading="lazy" alt="Анализ и выбор подачи: начала с проблем производства, а не с функций программы. Позиции директора и разработчика."></section>
+  <section id="scenario"><img src="img/3_scenario.webp" width="1130" height="1590" loading="lazy" alt="Сценарий и структура: каждый блок лендинга отвечает на один вопрос клиента. Карта страницы и два пути к заявке."></section>
+  <section id="solution">
+    <img src="img/4_solution.webp" width="1130" height="5108" loading="lazy" alt="Моё решение: лендинг от проблем к заявке на консультацию. Ключевые блоки, возможности системы, 3D-визуалы, состояния формы, мобильная версия.">
+    <button class="hot" type="button" data-link="mobile" aria-label="Открыть мобильную версию" style="left:5.39%;top:96.15%;width:28.91%;height:1%"></button>
+  </section>
+  <section id="ui"><img src="img/5_ui.webp" width="1130" height="1724" loading="lazy" alt="UI-система и итог: одна система на десктоп и телефон, компоненты и состояния, итог."></section>
+  <section id="next">
+    <img src="img/6_cta.webp" width="1130" height="127" loading="lazy" alt="">
+    <a class="hot" href="prototype/index.html" target="_blank" rel="noopener" aria-label="Открыть прототип" style="left:5.04%;top:31.5%;width:20.6%;height:37%"></a>
+    <a class="hot" href="../roto/index.html" aria-label="Смотреть следующий кейс" style="left:27.23%;top:31.5%;width:26.11%;height:36.2%"></a>
+  </section>
+</main>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var NOTES = { prototype: 'Здесь откроется прототип лендинга — ссылка ещё не добавлена', mobile: 'Здесь откроется мобильная версия — ссылка ещё не добавлена' };
+  var links = Array.prototype.slice.call(document.querySelectorAll('.menu a'));
+  var menu = document.querySelector('.menu');
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var current = -2, pinned = null, pinTimer;
+
+  function setActive(i) {
+    if (i === current) return;
+    current = i;
+    links.forEach(function (a, k) {
+      a.classList.toggle('active', k === i);
+      if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+    if (i >= 0) {
+      var a = links[i], l = a.offsetLeft, r = l + a.offsetWidth;
+      if (l < menu.scrollLeft || r > menu.scrollLeft + menu.clientWidth) menu.scrollTo({ left: l - 16, behavior: 'smooth' });
+    }
+  }
+  function onScroll() {
+    if (pinned !== null) return;
+    var probe = window.innerHeight * 0.35, idx = -1;
+    sections.forEach(function (s, k) { if (s && s.getBoundingClientRect().top <= probe) idx = k; });
+    // At the very bottom the last block may never reach the probe line.
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) idx = sections.length - 1;
+    setActive(idx);
+  }
+  // A click lights the chosen item at once and keeps it lit while the page scrolls there.
+  links.forEach(function (a, k) {
+    a.addEventListener('click', function () {
+      pinned = k; setActive(k);
+      clearTimeout(pinTimer); pinTimer = setTimeout(function () { pinned = null; onScroll(); }, 900);
+    });
+  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  document.querySelectorAll('img').forEach(function (img) { img.addEventListener('load', onScroll); });
+  onScroll();
+
+  var toast = document.querySelector('.toast'), timer;
+  document.querySelectorAll('[data-link]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      toast.textContent = NOTES[el.getAttribute('data-link')];
+      toast.classList.add('show');
+      clearTimeout(timer); timer = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+    });
+  });
+})();
+</script>
+
+
+<style>
+/* Phone: the case blocks are pictures, so each opens full size to read */
+.zv { display: none; }
+@media (max-width: 700px) {
+  main section > img { cursor: zoom-in; }
+  .zhint { position: fixed; z-index: 15; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); padding: 10px 16px; border-radius: 14px; background: rgba(20,20,20,.92); color: #fff; font: 400 14px "Onest", "Golos Text", Arial, sans-serif; white-space: nowrap; transition: opacity .3s; pointer-events: none; }
+  .zhint.off { opacity: 0; }
+  .zv[open] { display: block; position: fixed; inset: 0; z-index: 30; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0A0A0A; overflow: auto; -webkit-overflow-scrolling: touch; }
+  .zv::backdrop { background: #0A0A0A; }
+  .zv img { display: block; width: 260vw; max-width: none; height: auto; }
+  .zv-close { position: fixed; z-index: 31; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(12px + env(safe-area-inset-right, 0px)); width: 44px; height: 44px; border: 0; border-radius: 14px; background: rgba(30,30,30,.92); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; }
+  .zv-tip { position: fixed; z-index: 31; left: 12px; top: calc(12px + env(safe-area-inset-top, 0px)); padding: 10px 14px; border-radius: 14px; background: rgba(30,30,30,.92); color: #fff; font: 400 14px "Onest", "Golos Text", Arial, sans-serif; pointer-events: none; }
+}
+</style>
+<dialog class="zv" id="zv" aria-label="Блок кейса крупно"><button class="zv-close" type="button" id="zvClose" aria-label="Закрыть">×</button><p class="zv-tip">Листайте в&nbsp;стороны и&nbsp;вниз</p><img id="zvImg" alt=""></dialog>
+<script>
+(function () {
+  var mq = window.matchMedia('(max-width: 700px)'), d = document.getElementById('zv'), zi = document.getElementById('zvImg');
+  if (!d.showModal) return;
+  var hint = document.createElement('p'); hint.className = 'zhint'; hint.textContent = 'Нажмите на блок, чтобы рассмотреть';
+  if (mq.matches) { document.body.appendChild(hint); setTimeout(function () { hint.classList.add('off'); }, 4500); }
+  document.querySelectorAll('main section > img').forEach(function (im) {
+    im.addEventListener('click', function () {
+      if (!mq.matches) return;
+      zi.src = im.currentSrc || im.src; zi.alt = im.alt; d.showModal(); d.scrollTo(0, 0);
+    });
+  });
+  document.getElementById('zvClose').addEventListener('click', function () { d.close(); });
+})();
+</script>
+</body></html>

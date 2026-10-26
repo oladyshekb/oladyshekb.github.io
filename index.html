@@ -1,1192 +1,262 @@
 <!doctype html><html lang="ru"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Кейс: Ротоснаб</title>
-<style>
-/* Phone cover: text → buttons → visual → facts as tiles */
-@media (max-width: 700px) {
-  .sec.cover { display: flex !important; flex-direction: column; align-items: stretch !important; padding-bottom: 18px !important; }
-  .sec.cover .cover-text { display: contents; }
-  .sec.cover .eyebrow { order: 1; margin-bottom: 16px; font-size: 13px; }
-  .sec.cover h1 { order: 2; font-size: clamp(30px, 9vw, 40px); font-weight: 700; }
-  .sec.cover .lede { order: 3; margin-top: 16px; }
-  .sec.cover .cover-btns { order: 4; position: relative; z-index: 1; margin-top: 24px; width: 100%; flex-direction: column; gap: 12px; }
-  .sec.cover .cover-btns .cb { flex: none; width: 100%; min-width: 0; height: 54px; font-size: 18px; }
-  .sec.cover .cover-visual { order: 5; position: relative; right: auto; top: auto; transform: none; width: calc(100% + 16px); margin: 24px -8px 0; }
-  .sec.cover .meta { order: 6; margin-top: 24px; padding-top: 0; border-top: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .sec.cover .meta div { padding: 16px; border-radius: 18px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); min-width: 0; }
-  .sec.cover .meta dd { font-size: 17px; }
-}
-</style>
-
-<style>
-/* Cover buttons: same pair on every case cover, matching the portfolio main page */
-.cb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: 51px; min-width: 259px; padding: 0 1.2em; border-radius: 13px; font: 400 17px var(--font); text-decoration: none; white-space: nowrap; border: 1px solid #FFFFFF; transition: background-color .2s, color .2s, border-color .2s, box-shadow .25s; }
-.cb-fill { background: #FFFFFF; color: #121212; }
-.cb-line { background: transparent; color: #FFFFFF; }
-.cb:hover, .cb:focus-visible { background: #00ACF9; border-color: #00ACF9; color: #FFFFFF; box-shadow: 0 0 24px rgba(0,172,249,.55), 0 0 6px rgba(0,172,249,.75); outline: none; }
-@media (prefers-reduced-motion: reduce) { .cb { transition: none; } }
-@media (max-width: 560px) { .cover-btns .cb { min-width: 0; flex: 1 1 200px; } }
-</style>
-<script>
-/* Open every case at its cover, not wherever the previous page was scrolled */
-(function () {
-  try { history.scrollRestoration = 'manual'; } catch (e) {}
-  if (location.hash) return;
-  var top = function () { window.scrollTo(0, 0); };
-  top(); document.addEventListener('DOMContentLoaded', top); window.addEventListener('load', top);
-})();
-</script>
-
+<title>Лада Белык</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;700&display=swap">
 <style>
-/* Layout: the portfolio's own case language (as in the MES case) — white section cards on a light ground,
-   [n] section labels, a blue accent phrase in each heading, light/dark comparison pairs, numbered outline cards,
-   a dark "solution" section with screens on light plates, a dark summary. One blue only: #00ACF9. */
+/* Layout: one centred column of dark rounded cards on a near-black ground, one orange glow behind the hero showcase */
 :root {
-  --ground: #F1F4F9;
-  --card: #FFFFFF;
-  --plate: #EEF2F7;
-  --line: #DDE2EA;
-  --ink: #1F2125;
-  --text: #33363D;
-  --muted: #8A93A3;
-  --blue: #00ACF9;
-  --blue-line: rgba(0, 172, 249, .45);
-  --dark: #121313;
-  --dark-3: #2A2C2F;
-  --on-dark: #FFFFFF;
-  --on-dark-2: #B3B9C2;
+  --ground: #0D0D09;
+  --card: #141413;
+  --card-2: #1A1A18;
+  --fg: #FFFFFF;
+  --text: #B4B4B0;
+  --muted: #8E8E8A;
+  --accent: #FF7542;
   --font: "Onest", "Helvetica Neue", Arial, sans-serif;
-  --t1: clamp(36px, 3.9vw, 56px);
-  --t2: clamp(28px, 2.8vw, 40px);
-  --t3: clamp(20px, 1.8vw, 26px);
-  --t4: 17px;
-  --t5: 14px;
-  --pad: clamp(24px, 5.3vw, 60px);
-  --nav-h: 75px;
-  color-scheme: light;
+  color-scheme: dark;
 }
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { background: var(--ground); color: var(--text); font-family: var(--font); font-size: var(--t4); line-height: 1.55; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--card); }
-h1, h2, h3, p, figure, dl, dd, ul, ol { margin: 0; }
-h1, h2, h3 { color: var(--ink); text-wrap: balance; }
-b, strong { font-weight: 600; color: var(--ink); }
-:is(a, button):focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+html, body { overflow-x: clip; }
+body { background: var(--ground); color: var(--text); font-family: var(--font); font-weight: 300; font-size: 18px; line-height: 1.45; }
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--card); }
-.nav-inner { height: var(--nav-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-@media (min-width: 1100px) { .nav-inner { padding-left: max(52px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); } }
-.all { justify-self: start; color: var(--blue); text-decoration: none; font-size: 16px; }
-.menu { display: flex; gap: 8px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
-.menu::-webkit-scrollbar { display: none; }
-.menu a { flex: 0 0 auto; padding: 8px; color: #4A4D5A; text-decoration: none; font-size: 16px; white-space: nowrap; transition: color .2s; }
-.menu a:hover, .menu a.active { color: var(--blue); }
+/* Top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(13,13,9,.92); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
+.top-in { max-width: 1016px; margin: 0 auto; height: 60px; display: flex; align-items: center; gap: 24px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top .who { color: var(--muted); font-size: 15px; margin-right: auto; }
+.top .phone { color: var(--fg); font-size: 15px; white-space: nowrap; user-select: all; }
+.tg { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); text-decoration: none; white-space: nowrap; transition: text-shadow .2s; }
+.top .tg { font-size: 15px; }
+.tg svg { width: 18px; height: 18px; }
+.tg:hover { text-shadow: 0 0 12px rgba(255,117,66,.6); }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; height: 51px; min-width: 259px; padding: 0 32px; box-sizing: border-box; border-radius: 12px; font: 500 17px var(--font); text-decoration: none; white-space: nowrap; cursor: pointer; border: 0; transition: filter .2s, background-color .2s, transform .15s; }
-.btn:active { transform: translateY(1px); }
-.btn-blue { background: var(--blue); color: #FFFFFF; }
-.btn-blue:hover { filter: brightness(.94); }
-.btn-ghost { background: var(--dark-3); color: var(--on-dark); border: 1.5px solid rgba(255,255,255,.85); }
-.btn-ghost:hover { background: #34363A; }
-.nav .btn { justify-self: end; }
+.wrap { position: relative; z-index: 1; max-width: 1016px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 56px 56px; }
+.card { background: var(--card); border-radius: 28px; --pad: clamp(24px, 4.3vw, 44px); padding: var(--pad); min-width: 0; }
+/* Equal space above and below the text: trim the line-height leading on the first and last lines */
+.card > :first-child { text-box: trim-start cap alphabetic; }
+.card > :last-child { text-box: trim-end cap alphabetic; }
+.h2 { color: var(--fg); font-size: clamp(24px, 2.8vw, 30px); line-height: 1.2; font-weight: 400; text-wrap: balance; }
 
-main { max-width: 1130px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 70px 100px; }
-@media (min-width: 1162px) { main { padding-left: 0; padding-right: 0; } }
-.sec { background: var(--card); border-radius: 30px; padding: var(--pad); scroll-margin-top: calc(var(--nav-h) + 20px); min-width: 0; }
-.sec.dark { background: var(--dark); color: var(--on-dark-2); position: relative; overflow: hidden; }
-.sec.dark::before { content: ""; position: absolute; left: -20%; top: -10%; width: 70%; height: 40%; background: radial-gradient(closest-side, rgba(0,172,249,.16), transparent); pointer-events: none; }
-.sec.dark > * { position: relative; }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 32px; box-sizing: border-box; border-radius: 14px; font: 400 18px var(--font); text-decoration: none; white-space: nowrap; cursor: pointer; border: 1px solid transparent; transition: background-color .2s, color .2s, border-color .2s, box-shadow .25s, transform .15s; }
+.btn:active { transform: scale(.97); }
+.btn-fill { background: var(--fg); color: #121212; }
+.btn-line { border-color: var(--fg); color: var(--fg); background: transparent; }
+.btn:hover, .btn:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--fg); box-shadow: 0 0 24px rgba(255,117,66,.6), 0 0 6px rgba(255,117,66,.8); }
 
-.eyebrow { font-size: var(--t5); font-weight: 500; letter-spacing: .02em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; }
-.dark .eyebrow { color: var(--on-dark); }
-.h2 { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.08; font-weight: 700; letter-spacing: -.025em; max-width: 20em; }
-.h2 em { font-style: normal; color: var(--blue); }
-.dark .h2 { color: var(--on-dark); }
-.intro { margin-top: 20px; max-width: 64ch; display: flex; flex-direction: column; gap: 14px; }
-.dark .intro b { color: var(--on-dark); }
-.h3 { font-size: var(--t3); line-height: 1.25; font-weight: 600; letter-spacing: -.01em; }
-.dark .h3 { color: var(--on-dark); }
-.sub { margin-top: 56px; padding-top: 56px; border-top: 1px solid var(--line); }
-.dark .sub { border-top-color: rgba(255,255,255,.12); }
-.sub-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
-.sub-head p { color: var(--muted); }
-.dark .sub-head p { color: var(--on-dark-2); }
+/* Hero: a manifesto line set large, name and role as a line above it, one orange glow behind */
+.hero { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; background: rgba(20,20,19,.35); isolation: isolate; }
+.hero::before { content: ""; position: absolute; z-index: -1; left: 86%; top: 30%; width: 1100px; height: 1100px; transform: translate(-50%, -50%); pointer-events: none;
+  background: radial-gradient(circle closest-side, rgba(255,117,66,.85) 0%, rgba(226,90,40,.66) 14%, rgba(196,76,36,.42) 30%, rgba(150,58,30,.22) 50%, rgba(100,40,24,.08) 72%, transparent 100%); }
+.role { display: flex; align-items: center; gap: 12px; color: var(--fg); font-size: 18px; font-weight: 400; }
+.role::before { content: ""; flex: 0 0 auto; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.manifest span { display: block; white-space: nowrap; }
+.manifest { margin-top: 24px; color: var(--fg); font-size: clamp(36px, 5.6vw, 64px); line-height: 1.04; font-weight: 400; letter-spacing: -.028em; text-wrap: balance; }
+.about { margin-top: 24px; }
+.about span { display: block; }
+@media (max-width: 860px) { .about span { display: inline; } }
+.hero-btns { margin-top: 36px; display: grid; grid-template-columns: repeat(2, minmax(max-content, 1fr)); width: max-content; max-width: 100%; gap: 12px; }
+.hero-btns .btn { padding: 0 44px; }
 
-.pill { display: inline-flex; align-items: center; height: 30px; padding: 0 16px; border-radius: 999px; font-size: var(--t5); font-weight: 500; white-space: nowrap; box-sizing: border-box; }
-.pill-line { border: 1px solid var(--ink); color: var(--ink); }
-.pill-blue { background: var(--blue); color: #FFFFFF; }
-.pill-dark { background: var(--dark); color: #FFFFFF; }
+.skills { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.skills i { font-style: normal; color: var(--accent); }
+/* How I work */
+.how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 32px; list-style: none; padding: 0; }
+.how li { background: var(--card-2); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.how h3 { color: var(--fg); font-size: 20px; line-height: 1.25; font-weight: 400; }
+.how p { font-size: 16px; }
+.how .from { margin-top: auto; padding-top: 6px; color: var(--accent); font-size: 15px; }
+.tools { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+.tools li { display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border-radius: 999px; background: var(--card-2); color: var(--fg); font-size: 15px; }
 
-/* Screens: one frame everywhere — thin brand-blue line on a light plate */
-.screen { display: block; width: 100%; padding: 14px; box-sizing: border-box; background: #FFFFFF; border: 1px solid var(--blue-line); border-radius: 22px; cursor: zoom-in; transition: border-color .2s, transform .25s; }
-.screen:hover { border-color: var(--blue); transform: translateY(-2px); }
-.screen img { display: block; width: 100%; height: 100%; border-radius: 10px; }
-.screen.fit { aspect-ratio: 16 / 10; padding: 24px; }
-.screen.fit img { object-fit: contain; }
-.screen.top { aspect-ratio: 16 / 10; }
-.screen.top img { object-fit: cover; object-position: top; }
-.screen.pair { display: flex; flex-direction: column; justify-content: center; gap: 14px; }
-.screen.pair img { height: auto; }
+/* Cases */
+#cases { scroll-margin-top: 80px; }
+.cases-head p { margin-top: 12px; max-width: 48ch; }
+.grid { margin-top: 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.case { display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; text-decoration: none; color: var(--text); background: var(--card-2); transition: box-shadow .25s, transform .25s; min-width: 0; }
+.case.wide { grid-column: 1 / -1; }
+.case:hover, .case:focus-visible { box-shadow: 0 0 0 1px var(--accent), 0 0 32px rgba(255,117,66,.25); transform: translateY(-2px); outline: none; }
+.shot { aspect-ratio: 16 / 9.15; max-width: 100%; overflow: hidden; background: #0B0B0B; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform .5s; }
+.case:hover .shot img { transform: scale(1.02); }
+.cap { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 6px; }
+.cap > b { color: var(--fg); font-weight: 400; font-size: 20px; }
+.cap span { font-size: 15px; }
+.cap .go { color: var(--accent); }
+.cap .sub { color: var(--muted); }
+.cap .sub b { color: var(--fg); font-weight: 400; }
 
-/* Cover */
-.cover { background: var(--dark); color: var(--on-dark); position: relative; overflow: hidden; min-height: 642px; box-sizing: border-box; display: flex; align-items: center; }
-.cover::before { content: ""; position: absolute; right: -10%; top: 0; width: 70%; height: 100%; background: radial-gradient(closest-side, rgba(0,172,249,.22), transparent); pointer-events: none; }
-.cover-text { position: relative; z-index: 1; width: min(540px, 100%); }
-.cover .eyebrow { color: #E8EBEF; font-size: 15px; margin-bottom: 24px; }
-.cover .eyebrow span { color: #9EA5AE; }
-.cover h1 { color: var(--on-dark); font-size: var(--t1); line-height: 1.08; font-weight: 600; letter-spacing: -.02em; }
-.cover .lede { margin-top: 24px; font-size: var(--t4); color: var(--on-dark-2); max-width: 24em; }
-.cover .lede b { color: var(--on-dark); font-weight: 500; }
-.cover-btns { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px; }
-.cover-btns .btn { min-width: 0; padding: 0 28px; }
-.meta { margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.18); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-.meta dt { font-size: 15px; color: #9EA5AE; }
-.meta dd { margin-top: 10px; font-size: 15px; line-height: 1.4; color: var(--on-dark); }
-.cover-visual { position: absolute; z-index: 0; right: -40px; top: 50%; width: 57%; transform: translateY(-50%); }
-.cover-visual img { display: block; width: 100%; height: auto; animation: drift 9s ease-in-out infinite alternate; }
-@keyframes drift { to { transform: translateY(-10px); } }
-@media (max-width: 1000px) {
-  .cover { display: block; min-height: 0; padding-bottom: 0; }
-  .cover-visual { position: relative; right: auto; top: auto; transform: none; width: calc(100% + var(--pad)); margin-top: 40px; }
-  .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+/* Rotosnab cover rebuilt in the MES cover's layout; sized in cqw so it scales like the MES cover image (base width 1130) */
+.rc { position: relative; height: 100%; container-type: inline-size; overflow: hidden; background: #0E1012; color: #fff; }
+.rc-in { --u: calc(100cqw / 1130); position: absolute; inset: 0; }
+.rc-in::before { content: ""; position: absolute; right: -8%; top: -5%; width: 70%; height: 110%; background: radial-gradient(closest-side, rgba(0,172,249,.22), transparent); }
+.rc-text { position: absolute; z-index: 2; left: calc(62 * var(--u)); top: calc(52 * var(--u)); width: calc(560 * var(--u)); }
+.rc-eye { font-size: calc(13.5 * var(--u)); letter-spacing: .03em; text-transform: uppercase; color: #E8EBEF; }
+.rc-eye span { color: #9EA5AE; }
+.rc-h { margin-top: calc(26 * var(--u)); width: calc(470 * var(--u)); font-size: calc(43 * var(--u)); line-height: 1.17; font-weight: 700; letter-spacing: -.015em; }
+.rc-lede { margin-top: calc(30 * var(--u)); font-size: calc(17 * var(--u)); color: #C9CED6; }
+.rc-lede b { color: #fff; font-weight: 500; }
+.rc-btns { margin-top: calc(26 * var(--u)); display: flex; gap: calc(14 * var(--u)); }
+.rc-btns span { display: inline-flex; align-items: center; justify-content: center; width: calc(261 * var(--u)); height: calc(52 * var(--u)); border-radius: calc(12 * var(--u)); font-size: calc(16 * var(--u)); font-weight: 500; box-sizing: border-box; }
+.rc-b1 { background: #00ACF9; }
+.rc-b2 { background: #2A2C2F; border: calc(1.5 * var(--u)) solid rgba(255,255,255,.85); }
+.rc-meta { margin-top: calc(48 * var(--u)); padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.18); width: calc(600 * var(--u)); display: grid; grid-template-columns: 1.15fr 1.2fr .7fr 1fr; gap: calc(20 * var(--u)); }
+.rc-meta i { display: block; font-style: normal; font-size: calc(14 * var(--u)); color: #9EA5AE; }
+.rc-meta em { display: block; margin-top: calc(12 * var(--u)); font-style: normal; font-size: calc(16 * var(--u)); line-height: 1.35; color: #fff; }
+.shot .rc-vis { position: absolute; object-fit: contain; z-index: 1; right: calc(-40 * var(--u)); top: 46%; width: calc(560 * var(--u)); height: auto; max-width: none; transform: translateY(-50%); }
+.case:hover .shot .rc-vis { transform: translateY(-50%) scale(1.02); }
 
-/* Было / нужно */
-.pair2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.side { border-radius: 26px; padding: 26px; display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative; overflow: hidden; }
-.side.light { background: var(--plate); }
-.side.night { background: var(--dark); color: var(--on-dark-2); }
-.side.night::after { content: ""; position: absolute; left: 10%; bottom: -40%; width: 80%; height: 70%; background: radial-gradient(closest-side, rgba(0,172,249,.25), transparent); pointer-events: none; }
-.side > * { position: relative; z-index: 1; }
-.side .pill { align-self: flex-start; }
-.side .note { font-size: 15px; line-height: 1.45; }
-.side.night .note b { color: var(--on-dark); }
-.rows { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-.rows li { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; }
-.rows .n, .rows .t { display: flex; align-items: center; min-height: 46px; box-sizing: border-box; border-radius: 12px; background: var(--card); color: var(--ink); font-size: 15px; }
-.rows .n { justify-content: center; }
-.rows .t { padding: 8px 20px; line-height: 1.35; }
-.rows .q .n, .rows .q .t { background: transparent; border: 1.5px dashed var(--blue); }
-.night .rows .n, .night .rows .t { background: var(--dark-3); color: var(--on-dark); border: 1px solid rgba(255,255,255,.14); }
-.night .rows .hi .n, .night .rows .hi .t { background: var(--blue); border-color: var(--blue); color: #FFFFFF; }
-@media (max-width: 860px) { .pair2 { grid-template-columns: 1fr; } }
+/* Phone case cards */
+.m { display: none; }
 
+/* Contacts */
+.contacts .h2 { margin-bottom: 16px; }
+.contacts p { color: var(--fg); }
+.contacts a { color: var(--accent); text-decoration: none; transition: text-shadow .2s; }
+.contacts a:hover { text-shadow: 0 0 12px rgba(255,117,66,.6); }
+.note { display: none; position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 20; max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 14px; background: #1E1E1C; color: var(--fg); font-size: 15px; }
 
-
-/* TL;DR */
-.tldr { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr); gap: 8px; align-items: stretch; }
-.tl { border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.tl-1 { background: var(--plate); }
-.tl-2 { background: var(--plate); }
-.tl-3 { background: var(--blue); }
-.tl-k { font-size: var(--t5); font-weight: 500; text-transform: uppercase; letter-spacing: .02em; color: var(--blue); }
-.tl-lead { font-size: 22px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; color: var(--ink); }
-.tl p { color: var(--text); line-height: 1.55; font-size: 16px; }
-.tl-3 .tl-k { color: rgba(255,255,255,.85); }
-.tl-3 .tl-lead, .tl-3 p { color: #FFFFFF; }
-.tl-arr { align-self: center; width: 24px; height: 24px; color: var(--blue); }
-.tl-facts { margin: 32px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-.tl-facts div { display: flex; flex-direction: column; gap: 4px; }
-.tl-facts dt { font-size: 32px; line-height: 1.1; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
-.tl-facts dd { margin: 0; font-size: 15px; color: var(--muted); }
-@media (max-width: 900px) { .tldr { grid-template-columns: 1fr; } .tl-arr { transform: rotate(90deg); justify-self: center; } .tl-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.tldr-ba { margin-top: 40px; }
-@media (max-width: 860px) { .tldr { grid-template-columns: 1fr; } }
-
-/* Before / after */
-.ba { display: flex; flex-direction: column; gap: 40px; }
-.ba-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
-.ba-side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.ba-side .pill { align-self: flex-start; }
-.screen.ba-shot { padding: 10px; }
-.screen.ba-shot img { height: auto; }
-.ba-side figcaption { display: flex; flex-direction: column; gap: 4px; font-size: 15px; line-height: 1.5; color: var(--text); }
-.ba-side figcaption b { font-size: var(--t4); }
-@media (max-width: 860px) { .ba-row { grid-template-columns: 1fr; } }
-
-/* Outline cards with [n] */
-.ocards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.ocard { border: 1px solid #CDD3DC; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.ocard b { font-size: var(--t4); }
-.ocard b i, .qtab-row b i, .gcard li b i { font-style: normal; color: var(--blue); font-weight: 500; }
-.ocard p { line-height: 1.5; }
-@media (max-width: 860px) { .ocards { grid-template-columns: 1fr; } }
-
-/* Team & process */
-.team { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-.proc { list-style: none; padding: 0; counter-reset: pr; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.proc li { counter-increment: pr; background: var(--plate); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 8px; min-width: 0; position: relative; }
-.proc li::before { content: counter(pr, decimal-leading-zero); font-size: var(--t5); font-weight: 600; color: var(--blue); }
-.proc li span { font-size: 15px; line-height: 1.5; }
-@media (max-width: 1000px) { .proc { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .proc { grid-template-columns: 1fr; } }
-/* Role cards */
-.roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.rcard { background: var(--plate); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; min-width: 0; }
-.rcard ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.rcard li a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--blue); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-.rcard li a:hover { color: var(--blue); }
-@media (max-width: 860px) { .roles { grid-template-columns: 1fr; } }
-
-/* Вопрос → блок table */
-.qtab-head, .qtab-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr); gap: 24px; align-items: center; }
-.qtab-head { padding-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 14px; text-transform: uppercase; color: var(--muted); }
-.qtab-row { padding: 20px 0; border-bottom: 1px solid var(--line); }
-.qtab-row b { display: block; }
-.qtab-row svg { color: var(--blue); }
-.qtab-row a { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--blue); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-.qtab-row a:hover { color: var(--blue); }
-@media (max-width: 760px) { .qtab-head { display: none; } .qtab-row { grid-template-columns: 1fr; gap: 6px; } .qtab-row svg { display: none; } }
-
-/* Site tree */
-.tree-root { width: min(340px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 4px; text-align: center; }
-.tree-root .screen, .node .screen { margin-bottom: 10px; padding: 8px; border-radius: 16px; }
-.tree-root .screen img, .node .screen img { border-radius: 8px; }
-.node b, .tree-root b { font-size: var(--t4); }
-.node span, .tree-root span { font-size: 15px; line-height: 1.45; color: var(--muted); }
-.branches { --lw: 1.5px; --gap: 16px; position: relative; margin-top: 48px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
-/* stem from the root down to the rail */
-.branches::after { content: ""; position: absolute; left: calc(50% - var(--lw) / 2); top: -48px; height: 25px; width: var(--lw); background: var(--blue); }
-.branch { position: relative; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-/* rail: each branch draws its share, spanning half the gap on both sides so the pieces meet */
-.branch::before { content: ""; position: absolute; top: -24px; height: 24px; left: calc(var(--gap) / -2); right: calc(var(--gap) / -2); border-top: var(--lw) solid var(--blue); box-sizing: border-box; }
-/* drop from the rail to each pill */
-.branch::after { content: ""; position: absolute; top: -24px; height: 24px; left: calc(50% - var(--lw) / 2); width: var(--lw); background: var(--blue); }
-/* outer branches: the rail starts at the centre and turns down with a rounded corner */
-.branch:first-child::before { left: calc(50% - var(--lw) / 2); border-left: var(--lw) solid var(--blue); border-top-left-radius: 14px; }
-.branch:last-child::before { right: calc(50% - var(--lw) / 2); border-right: var(--lw) solid var(--blue); border-top-right-radius: 14px; }
-.branch:first-child::after, .branch:last-child::after { display: none; }
-.branch .pill { align-self: center; }
-.node { display: flex; flex-direction: column; gap: 2px; }
-@media (max-width: 900px) { .branches { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; } .branches::after, .branch::before, .branch::after { display: none; } }
-@media (max-width: 520px) { .branches { grid-template-columns: 1fr; } }
-
-
-/* Roles map */
-.roles-map { --lw: 1.5px; --g: 14px; }
-.rm-root { width: min(300px, 100%); margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
-.rm-root .screen, .rcol .screen { padding: 8px; border-radius: 16px; margin-bottom: 8px; }
-.rm-root .screen img, .rcol .screen img { border-radius: 8px; }
-.rm-cols { position: relative; margin-top: 48px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--g); }
-.rm-cols::before { content: ""; position: absolute; left: calc(50% - var(--lw) / 2); top: -48px; height: 25px; width: var(--lw); background: var(--blue); }
-.rcol { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; min-width: 0; }
-.rcol::before { content: ""; position: absolute; top: -24px; height: 24px; left: calc(var(--g) / -2); right: calc(var(--g) / -2); border-top: var(--lw) solid var(--blue); box-sizing: border-box; }
-.rcol::after { content: ""; position: absolute; top: -24px; height: 24px; left: calc(50% - var(--lw) / 2); width: var(--lw); background: var(--blue); }
-.rcol:first-child::before { left: calc(50% - var(--lw) / 2); border-left: var(--lw) solid var(--blue); border-top-left-radius: 14px; }
-.rcol:last-child::before { right: calc(50% - var(--lw) / 2); border-right: var(--lw) solid var(--blue); border-top-right-radius: 14px; }
-.rcol:first-child::after, .rcol:last-child::after { display: none; }
-.rcol b, .rm-root b { font-size: var(--t4); }
-.role-chip { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; border: 0; color: #FFFFFF; font-size: 14px; font-weight: 500; background: var(--blue); }
-.rcol-note { font-size: 14px; line-height: 1.4; color: var(--muted); }
-.rm-goal { margin-top: 28px; padding-top: 24px; border-top: 1.5px dashed var(--blue); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.fullmap { margin-top: 32px; }
-.fullmap summary { cursor: pointer; font-weight: 600; color: var(--ink); list-style: none; display: inline-flex; align-items: center; gap: 8px; }
-.fullmap summary::before { content: "+"; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 500; }
-.fullmap[open] summary::before { content: "–"; }
-.fullmap summary::-webkit-details-marker { display: none; }
-.fullmap .screen { margin-top: 16px; max-width: 760px; }
-.fullmap .screen img { height: auto; }
-@media (max-width: 1000px) {
-  .rm-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 32px; }
-  .rm-cols::before, .rcol::before, .rcol::after { display: none; }
-}
-@media (max-width: 560px) { .rm-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
-
-/* Role v2 */
-.roles2 { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); gap: 16px; align-items: stretch; }
-.r2 { border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-.r2-head { display: flex; align-items: center; gap: 16px; }
-.r2-num { font-size: 56px; line-height: .9; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-.r2-head div { display: flex; flex-direction: column; gap: 2px; }
-.r2-k { font-size: 20px; font-weight: 700; }
-.r2-sub { font-size: 14px; }
-.r2-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
-.r2-list li { display: flex; align-items: center; gap: 10px; padding: 11px 0; font-size: 16px; line-height: 1.35; }
-.r2-list li + li { border-top: 1px solid var(--line); }
-.rc { width: 16px; height: 16px; flex: 0 0 16px; }
-.r2-main { background: var(--blue); color: #FFFFFF; }
-.r2-main .r2-num, .r2-main .r2-k { color: #FFFFFF; }
-.r2-main .r2-sub { color: rgba(255,255,255,.85); }
-.r2-main .r2-list li + li { border-top-color: rgba(255,255,255,.3); }
-.r2-main .r2-list li { padding: 0; }
-.r2-main a { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 0; color: #FFFFFF; text-decoration: none; font-weight: 500; }
-.r2-main a .ra { width: 16px; height: 16px; flex: 0 0 16px; transition: transform .2s; }
-.r2-main a:hover .ra, .r2-main a:focus-visible .ra { transform: translateX(4px); }
-.r2-main a:focus-visible { outline-color: #FFFFFF; }
-.r2-did { background: var(--plate); }
-.r2-did .r2-num, .r2-did .rc { color: var(--blue); }
-.r2-did .r2-sub { color: var(--muted); }
-.r2-did li { color: var(--ink); }
-.r2-not { background: #FFFFFF; border: 1px dashed #C6CCD5; }
-.r2-not .r2-num { color: #B7BEC8; }
-.r2-not .r2-k { color: var(--text); }
-.r2-not .r2-sub, .r2-not li, .r2-not .rc { color: var(--muted); }
-@media (max-width: 1000px) { .roles2 { grid-template-columns: 1fr 1fr; } .r2-main { grid-column: 1 / -1; } }
-@media (max-width: 640px) { .roles2 { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .r2-main a .ra { transition: none; } }
-
-/* Dark solution section */
-.hero-shot { margin-top: 40px; }
-.cap { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
-.cap-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.cap .h3 { font-size: var(--t4); font-weight: 600; }
-.cap p { line-height: 1.5; }
-.dark .cap b { color: var(--on-dark); }
-.cap .q { color: var(--on-dark); font-weight: 500; }
-.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 24px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 20px; }
-.grid2 figure, .grid3 figure { min-width: 0; scroll-margin-top: calc(var(--nav-h) + 20px); }
-.dark .screen { border-color: rgba(0,172,249,.5); }
-.dark .screen:hover { border-color: var(--blue); }
-.small-note { font-size: 14px; color: #8D949E; }
-@media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
-
-
-/* Feature rows: big screen + text, alternating */
-.feats { display: flex; flex-direction: column; gap: 72px; }
-.feat { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: stretch; scroll-margin-top: calc(var(--nav-h) + 20px); }
-.dark b, .dark strong { color: var(--on-dark); }
-.feat .screen.fit.auto { aspect-ratio: auto; }
-.feat .screen.fit.auto img { height: auto; }
-.feat-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; min-width: 0; }
-.feat-text p { line-height: 1.6; }
-.feat-q { font-size: 15px; color: var(--blue); font-weight: 500; }
-.feat-text .h3 { font-size: var(--t3); }
-.feat .screen.fit { padding: 20px; }
-.hero-cap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 32px; margin-top: 24px; align-items: baseline; }
-.hero-cap p { line-height: 1.6; }
-.dark .hero-cap b { color: var(--on-dark); }
-@media (max-width: 860px) { .feat, .feat:nth-child(even) { grid-template-columns: 1fr; gap: 20px; }  .hero-cap { grid-template-columns: 1fr; gap: 8px; } .feats { gap: 48px; } }
-
-
-/* Alternatives */
-.alt { align-self: stretch; display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 14px; border: 1px dashed rgba(255,255,255,.28); }
-.alt-k { font-size: 13px; text-transform: uppercase; letter-spacing: .02em; color: var(--on-dark-2); }
-.alt b { color: var(--on-dark); font-weight: 600; text-decoration: line-through; text-decoration-color: rgba(255,255,255,.45); }
-.alt span:last-child { font-size: 15px; line-height: 1.5; color: var(--on-dark-2); }
-
-/* Feat details */
-.more-d { align-self: stretch; }
-.more-d summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-weight: 500; font-size: 15px; }
-.more-d summary::-webkit-details-marker { display: none; }
-.more-d summary::after { content: ""; width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .2s; }
-.more-d[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
-.more-d[open] summary { margin-bottom: 12px; }
-.more-in { display: flex; flex-direction: column; gap: 12px; }
-@media (prefers-reduced-motion: reduce) { .more-d summary::after { transition: none; } }
-
-.feat-shot { display: flex; min-height: 320px; }
-.feat-shot .screen.fit { aspect-ratio: auto; height: 100%; flex: 1; }
-.feat-text { align-self: start; }
-@media (max-width: 860px) { .feat-shot { min-height: 0; } .feat-shot .screen.fit { aspect-ratio: 16 / 10; height: auto; } }
-/* Chapters */
-.chap .sub-head { gap: 6px; }
-.chap-n { font-size: var(--t5); font-weight: 500; text-transform: uppercase; letter-spacing: .02em; color: var(--blue); }
-.chap-t { font-size: var(--t2) !important; line-height: 1.15; }
-.chap .feats { margin-top: 8px; }
-.two-in { margin-top: 56px; }
-.dark .qtab-head { color: var(--on-dark-2); border-color: rgba(255,255,255,.14); }
-.dark .qtab-row { border-color: rgba(255,255,255,.12); }
-.dark .qtab-row b, .dark .qtab-row a { color: var(--on-dark); }
-.dark .qtab-row span { color: var(--on-dark-2); }
-.dark .side.light, .dark .side.night { background: #1F2124; }
-.dark .side.light .rows .n, .dark .side.light .rows .t { background: var(--dark-3); color: var(--on-dark); }
-.dark .side.light .note { color: var(--on-dark-2); }
-.dark .pill-line { border-color: rgba(255,255,255,.7); color: var(--on-dark); }
-
-/* Visual system */
-.basis { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px; align-items: stretch; }
-.basis .swatches { flex: 1; justify-content: space-between; }
-.bcard { border: 1px solid #CDD3DC; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-.bcard .label { font-size: 15px; text-transform: uppercase; color: var(--muted); }
-.swatches { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-.swatches li { display: grid; grid-template-columns: 30px 82px minmax(0, 1fr); gap: 12px; align-items: center; font-size: 15px; }
-.swatches i { width: 30px; height: 30px; border-radius: 8px; }
-.swatches i.lt { box-shadow: inset 0 0 0 1px #CDD3DC; }
-.swatches code { font: 500 15px var(--font); color: var(--ink); }
-.gfx { margin-top: 16px; }
-.screen.fit.wide { aspect-ratio: auto; padding: 24px; }
-.screen.fit.wide img { height: auto; }
-.two-notes { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-@media (max-width: 860px) { .basis, .two-notes { grid-template-columns: 1fr; } }
-
-
-/* ---------- UI kit (site components, measured from the layouts) ---------- */
-.kit { --k-blue: #00ACF9; --k-blue-h: #0098DC; --k-blue-p: #0089C7; --k-field: #F7F7F7; --k-ph: #949494; --k-ink: #1D1D1D; --k-dark: #282828; --k-coral: #FF8156; --k-err: #E5484D; --k-err-bg: #FFF1F1; --k-sky: #E3F6FF; }
-.src-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 500; white-space: nowrap; }
-.src-site { background: var(--plate); color: var(--text); }
-.src-new { background: var(--blue); color: #FFFFFF; }
-.legend { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-top: 20px; font-size: 15px; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 8px; }
-.metrics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
-.metric { background: var(--plate); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 6px; }
-.metric b { font-size: var(--t3); font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.metric span { font-size: 15px; color: var(--text); line-height: 1.4; }
-.kcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.kcard { border: 1px solid #CDD3DC; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.kcard .label { font-size: 15px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.krow { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: center; }
-.krow > span:first-child { font-size: 14px; color: var(--muted); line-height: 1.3; }
-.krow .src-tag { justify-self: start; }
-.kstack { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
-@media (max-width: 1000px) { .kcards { grid-template-columns: 1fr; } .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
-/* site components */
-.k-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 48px; padding: 0 20px; box-sizing: border-box; border-radius: 14px; border: 0; font: 500 14px var(--font); cursor: pointer; transition: background-color .18s, transform .12s, box-shadow .18s; white-space: nowrap; }
-.k-blue { background: var(--k-blue); color: #FFFFFF; }
-.k-blue:hover, .k-blue.is-hover { background: var(--k-blue-h); }
-.k-blue:active, .k-blue.is-press { background: var(--k-blue-p); transform: scale(.98); }
-.k-dark { background: var(--k-dark); color: #FFFFFF; }
-.k-dark:hover, .k-dark.is-hover { background: #3A3A3A; }
-.k-line { background: #FFFFFF; color: var(--k-blue); box-shadow: inset 0 0 0 1.5px var(--k-blue); }
-.k-line:hover, .k-line.is-hover { background: var(--k-sky); }
-.k-coral { background: var(--k-coral); color: #FFFFFF; }
-.k-btn:disabled, .k-btn.is-off { background: #E4E7EB; color: #A3A9B1; box-shadow: none; cursor: not-allowed; transform: none; }
-.k-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--k-blue); }
-.k-spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); border-top-color: #FFFFFF; animation: kspin .8s linear infinite; }
-@keyframes kspin { to { transform: rotate(360deg); } }
-
-.k-field { position: relative; display: flex; flex-direction: column; gap: 6px; width: 100%; }
-.k-input { width: 100%; height: 48px; box-sizing: border-box; padding: 0 16px; border-radius: 14px; border: 1.5px solid transparent; background: var(--k-field); color: var(--k-ink); font: 400 14px var(--font); outline: none; transition: border-color .18s, background-color .18s; }
-.k-input::placeholder { color: var(--k-ph); }
-.k-input:hover { background: #F1F1F1; }
-.k-input:focus, .k-input.is-focus { border-color: var(--k-blue); background: #FFFFFF; }
-.k-input.is-err, .k-input[aria-invalid="true"] { border-color: var(--k-err); background: var(--k-err-bg); }
-.k-msg { font-size: 12px; line-height: 1.3; color: var(--k-err); min-height: 0; }
-.k-ok { position: absolute; right: 14px; top: 15px; width: 18px; height: 18px; }
-
-.k-file { display: flex; align-items: center; gap: 10px; width: 100%; height: 48px; padding: 0 16px; box-sizing: border-box; border-radius: 14px; font: 500 14px var(--font); cursor: pointer; border: 0; }
-.k-file.empty { background: var(--k-dark); color: #FFFFFF; }
-.k-file.has { background: var(--k-sky); color: var(--k-ink); justify-content: space-between; }
-.k-file.has small { color: #4E6B7C; font-size: 12px; }
-.k-file.bad { background: var(--k-err-bg); color: var(--k-err); box-shadow: inset 0 0 0 1.5px var(--k-err); }
-.k-x { width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(0,0,0,.06); color: var(--k-ink); cursor: pointer; font-size: 14px; line-height: 1; flex: 0 0 auto; }
-
-.k-check { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--k-ink); cursor: pointer; }
-.k-check input { appearance: none; -webkit-appearance: none; margin: 0; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #C4C9CF; background: #FFFFFF; display: grid; place-items: center; cursor: pointer; flex: 0 0 auto; }
-.k-check input:checked { background: var(--k-blue); border-color: var(--k-blue); }
-.k-check input:checked::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #FFFFFF; border-bottom: 2px solid #FFFFFF; transform: translateY(-1px) rotate(-45deg); }
-.k-check.is-err input { border-color: var(--k-err); background: var(--k-err-bg); }
-.k-check u { text-decoration-color: #C4C9CF; text-underline-offset: 3px; }
-
-.k-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
-.k-tab { height: 34px; padding: 0 16px; border-radius: 10px; border: 0; background: var(--k-sky); color: var(--k-ink); font: 500 13px var(--font); cursor: pointer; transition: background-color .18s; }
-.k-tab:hover { background: #CDEFFF; }
-.k-tab[aria-pressed="true"] { background: var(--k-blue); color: #FFFFFF; }
-.k-tag { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; font: 500 12px var(--font); color: #FFFFFF; }
-
-/* live form */
-.live { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px; align-items: start; }
-.lform { background: #FFFFFF; border: 1px solid var(--blue-line); border-radius: 22px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
-.lform h4 { margin: 0 0 4px; font-size: 22px; font-weight: 600; color: var(--k-ink); line-height: 1.2; }
-.lform .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.lform .k-btn { height: 56px; font-size: 15px; }
-.done { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px 0; }
-.done i { width: 48px; height: 48px; border-radius: 50%; background: var(--k-sky); display: grid; place-items: center; }
-.done b { font-size: 20px; color: var(--k-ink); }
-.done p { color: var(--text); }
-.rules { display: flex; flex-direction: column; gap: 12px; }
-.rule { background: var(--plate); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
-.rule b { font-size: 16px; }
-.rule span { font-size: 15px; line-height: 1.5; }
-.rule q { quotes: "«" "»"; color: var(--k-err); }
-@media (max-width: 900px) { .live { grid-template-columns: 1fr; } .lform { padding: 20px; } .lform .row2 { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .k-spin { animation-duration: 2.4s; } .k-btn, .k-input, .k-tab { transition: none; } }
-
-
-/* UI kit */
-.kit-base { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
-.specs { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-.specs li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; font-size: 15px; }
-.specs b { font-weight: 600; }
-.kit-rows { display: flex; flex-direction: column; gap: 32px; }
-.kit-row { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 4fr); gap: 24px; align-items: center; }
-.kit-label { display: flex; flex-direction: column; gap: 6px; }
-.kit-label span { font-size: 15px; color: var(--text); line-height: 1.5; }
-.kit-state { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.kit-state figcaption { font-size: 15px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; line-height: 1.45; }
-.kit-state figcaption b { color: var(--ink); font-size: var(--t4); }
-.screen.kit-shot { padding: 12px; cursor: default; }
-button.screen.kit-shot { cursor: zoom-in; }
-.screen.kit-shot img { height: auto; }
-.kit-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.kit-err { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 40px; align-items: start; }
-.err-form { background: #FFFFFF; border: 1px solid var(--blue-line); border-radius: 22px; padding: 28px; display: flex; flex-direction: column; gap: 14px; }
-.f-field { display: flex; flex-direction: column; gap: 6px; }
-.f-label { font-size: 14px; color: #6B6B6B; }
-.f-input { display: flex; align-items: center; height: 54px; padding: 0 22px; border-radius: 24px; background: #F7F7F7; color: #111; font-size: 16px; box-sizing: border-box; border: 1.5px solid transparent; }
-.f-field.is-err .f-input { border-color: #E5484D; background: #FFF6F6; }
-.f-msg { font-size: 14px; color: #C9353A; line-height: 1.4; }
-.f-msg.solo { margin-top: -6px; }
-.f-check { display: flex; align-items: center; gap: 12px; font-size: 15px; color: #111; }
-.f-box { width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid #C4C4C4; flex: 0 0 auto; }
-.f-check.is-err .f-box { border-color: #E5484D; }
-.f-btn { display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 24px; background: #00ACF9; color: #fff; font-weight: 600; }
-.err-rules { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 22px; }
-.err-rules li { display: flex; flex-direction: column; gap: 6px; }
-.err-rules span { font-size: 15px; line-height: 1.5; }
-.kit-note { margin-top: 20px; }
-@media (max-width: 900px) { .kit-base, .kit-row, .kit-form, .kit-err { grid-template-columns: 1fr; } .specs li { grid-template-columns: 1fr; gap: 2px; } }
-
-#kf-submit[aria-busy="true"] { background: #FFFFFF; color: var(--blue); box-shadow: inset 0 0 0 1.5px var(--blue); }
-#kf-submit[aria-busy="true"] .k-spin { border-color: rgba(0,172,249,.3); border-top-color: var(--blue); }
-[hidden] { display: none !important; }
-
-/* Merged visual */
-.basis3 { display: grid; grid-template-columns: minmax(0, 3.6fr) minmax(0, 6.6fr) minmax(0, 3.8fr); gap: 16px; align-items: stretch; }
-.basis3 .swatches { gap: 14px; margin-top: 4px; }
-.basis3 .swatches li { grid-template-columns: 36px minmax(0, 1fr); column-gap: 14px; row-gap: 0; align-items: center; }
-.basis3 .swatches i { width: 36px; height: 36px; border-radius: 10px; grid-row: span 2; }
-.basis3 .swatches li span { grid-column: 2; margin-top: 0; font-size: 14px; line-height: 1.35; color: var(--muted); }
-.dir-shot { display: block; width: 100%; padding: 0; margin-top: 4px; border: 0; background: none; cursor: zoom-in; border-radius: 14px; overflow: hidden; transition: transform .25s; }
-.dir-shot:hover { transform: translateY(-2px); }
-.dir-shot img { display: block; width: 100%; height: auto; }
-.dir-shot:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-.forms { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-direction: column; gap: 16px; }
-.forms li { display: flex; flex-direction: column; gap: 8px; }
-.forms .cap { display: block; font-size: 14px; line-height: 1.4; color: var(--muted); }
-.forms .cap b { display: inline; color: var(--ink); font-weight: 600; margin-right: 6px; }
-.fx-field { height: 54px; border-radius: 24px; background: #F1F3F6; display: flex; align-items: center; padding: 0 22px; font-size: 15px; color: #9AA1AD; }
-.fx-btn { height: 48px; border-radius: 24px; background: var(--blue); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; }
-.fx-cards { display: flex; gap: 8px; }
-.fx-card { flex: 1; height: 44px; border-radius: 24px; border: 1.5px solid; }
-.fx-card.c1 { border-color: #00ACF9; background: #EEF9FF; }
-.fx-card.c2 { border-color: #FF8156; background: #FFF3EE; }
-.fx-card.c3 { border-color: #272827; background: #E8E8E8; }
-.dir-key { list-style: none; padding: 0; margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 13px; color: var(--muted); }
-.dir-key li { display: flex; align-items: center; gap: 8px; }
-.dir-key i { width: 12px; height: 12px; border-radius: 4px; }
-.ba-in { display: flex; flex-direction: column; gap: 20px; }
-.ba-t { margin: 0; font-size: var(--t3); font-weight: 600; color: var(--on-dark); }
-.dark .ba-side figcaption { color: var(--on-dark-2); }
-.dark .ba-side figcaption b { color: var(--on-dark); }
-@media (max-width: 1000px) { .basis3 { grid-template-columns: 1fr; } }
-
-/* Summary (dark) */
-.glass { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
-.gcard { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-.gcard ol { list-style: none; padding: 0; display: flex; flex-direction: column; }
-.gcard li { padding: 16px 0; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-direction: column; gap: 6px; }
-.gcard li:first-child { border-top: 0; padding-top: 0; }
-.gcard li b { color: var(--on-dark); font-size: var(--t4); }
-.gcard li span { color: var(--on-dark-2); line-height: 1.5; }
-.gcard .pill { align-self: flex-start; }
-.limits { margin-top: 24px; font-size: 15px; color: #8D949E; max-width: 60em; }
-@media (max-width: 860px) { .glass { grid-template-columns: 1fr; } }
-
-.end { background: #181818; border-radius: 30px; padding: 32px var(--pad); display: flex; flex-wrap: wrap; gap: 20px; }
-
-dialog.zoom { width: min(1240px, 100vw - 32px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--blue-line); border-radius: 20px; background: var(--card); }
-dialog.zoom::backdrop { background: rgba(12, 14, 18, .76); }
-.zoom-body { max-height: calc(100dvh - 34px); overflow: auto; }
-.zoom-body img { display: block; width: 100%; height: auto; }
-.zoom-close { position: sticky; top: 12px; float: right; margin: 12px 12px -56px 0; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--dark); color: #FFFFFF; font-size: 22px; line-height: 1; cursor: pointer; }
-
-.js .rise { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0ms); }
+/* Entrance: content is visible without script; script only adds the rise */
+.js .rise { opacity: 0; transform: translateY(22px); transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0ms); }
 .js .rise.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .js .rise { opacity: 1; transform: none; transition: none; }
-  .cover-visual img { animation: none; }
-  .menu a, .screen, .btn { transition: none; }
-}
+
 @media (max-width: 860px) {
-  :root { --nav-h: 60px; }
-  .nav-inner { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; }
-  .all { font-size: 14px; white-space: nowrap; }
-  .nav .btn { height: 38px; min-width: 0; padding: 0 14px; font-size: 14px; border-radius: 10px; }
-  .menu a { font-size: 14px; }
-  main { padding-block: 16px 48px; gap: 12px; }
-  .sec, .end { border-radius: 22px; }
-  .btn { min-width: 0; }
-  .sub { margin-top: 40px; padding-top: 40px; }
+  .how { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  body { font-size: 16px; }
+  .wrap { padding-block: 20px 40px; gap: 14px; }
+  .top .who { display: none; }
+  .top-in { justify-content: space-between; gap: 12px; }
+  .hero-btns { grid-template-columns: 1fr; width: 100%; }
+  .hero::before { left: 80%; top: 22%; width: 700px; height: 700px; }
+  .role { align-items: flex-start; font-size: 16px; }
+  .role::before { margin-top: .45em; }
+  .manifest { font-size: min(32px, calc((100vw - 88px) / 12.8)); }
+  .grid { grid-template-columns: 1fr; }
+  .skills i:nth-of-type(2) { display: none; }
+  .h2.skills { font-size: 20px; }
+  .skills span:last-child { flex-basis: 100%; white-space: nowrap; }
+  .case .shot, .case .cap { display: none; }
+  .m { display: flex; flex-direction: column; }
+  .m-vis { aspect-ratio: 4 / 3; overflow: hidden; background: #0E1113; }
+  .m-vis img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .m-roto .m-vis { background: #0E1012; display: grid; place-items: center; }
+  .m-roto .m-vis img { width: 92%; height: auto; object-fit: contain; }
+  .m-body { padding: 24px 18px 20px; display: flex; flex-direction: column; }
+  .m-eye { font-size: 15px; color: var(--muted); }
+  .m-title { margin-top: 8px; color: var(--fg); font-size: 30px; line-height: 1.05; font-weight: 500; letter-spacing: -.02em; }
+  .m-sub { margin-top: 10px; font-size: 17px; line-height: 1.35; color: var(--text); }
+  .m-chips { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .m-chips span { display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border-radius: 999px; background: #262624; color: var(--fg); font-size: 15px; }
+  .m-status { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-size: 16px; color: var(--text); }
+  .m-status i { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+  .m-btn { margin-top: 18px; display: flex; align-items: center; justify-content: center; height: 50px; border: 1px solid var(--fg); border-radius: 14px; color: var(--fg); font-size: 17px; transition: background-color .2s, border-color .2s, box-shadow .25s; }
+  .case:hover .m-btn, .case:focus-visible .m-btn { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 24px rgba(255,117,66,.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .rise { opacity: 1; transform: none; transition: none; }
+  .case, .shot img, .btn { transition: none; }
 }
 </style>
 <script>document.documentElement.classList.add('js');</script>
 
-<header class="nav">
-  <div class="nav-inner">
-    <a class="all" href="../index.html#cases">← Все кейсы</a>
-    <nav class="menu" aria-label="Разделы кейса">
-      <a href="#brief">Коротко</a>
-      <a href="#context">Контекст</a>
-      <a href="#structure">Структура</a>
-      <a href="#solution">Решение</a>
-      <a href="#visual">Визуал и UI-кит</a>
-      <a href="#result">Итог</a>
-    </nav>
-    <a class="btn btn-blue" href="https://rotosnab.ru/" target="_blank" rel="noopener">Живой сайт ↗</a>
-  </div>
-</header>
+<header class="top"><div class="top-in">
+  <span class="who">Лада Белык · UI/UX-дизайнер</span>
+  <span class="phone">+7&nbsp;(925)&nbsp;134&nbsp;80&nbsp;41</span>
+  <a class="tg" href="https://t.me/oladyshekb" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4.5 3.6 11.2c-.9.4-.9 1.5.1 1.8l4.4 1.4 1.7 5.2c.3.8 1.3 1 1.9.4l2.5-2.4 4.6 3.4c.7.5 1.7.1 1.9-.8L23 5.8c.2-1-.8-1.8-2-1.3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m8.2 14.3 9.8-6.6-7.3 7.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>@oladyshekb</a>
+</div></header>
 
-<main>
-  <section class="sec cover" id="top">
-    <div class="cover-text">
-      <p class="eyebrow rise">Кейс: Ротоснаб <span>· веб · B2B-сайт</span></p>
-      <h1 class="rise" style="--d:60ms">Сайт, который отвечает клиенту раньше менеджера</h1>
-      <p class="lede rise" style="--d:120ms">Путь от <b>вопросов клиентов</b> к <b>структуре и интерфейсу</b> сайта завода</p>
-      <div class="cover-btns rise" style="--d:180ms">
-        <a class="cb cb-fill" href="#solution">Смотреть решение</a>
-        <a class="cb cb-line" href="https://rotosnab.ru/" target="_blank" rel="noopener">Живой сайт ↗</a>
-      </div>
-      <dl class="meta rise" style="--d:240ms">
-        <div><dt>Роль</dt><dd>UI/UX-дизайнер</dd></div>
-        <div><dt>Срок</dt><dd>3 месяца</dd></div>
-        <div><dt>Команда</dt><dd>5 человек</dd></div>
-        <div><dt>Статус</dt><dd>Запущен, rotosnab.ru</dd></div>
-      </dl>
-    </div>
-    <div class="cover-visual"><img src="img/cover_visual.webp" width="1100" height="880" alt="Главная страница сайта Ротоснаб на ноутбуке и фрагменты интерфейса: карточка кейса, плитки отраслей, блок «Нет 3D-модели? Напишите нам»."></div>
-  </section>
-
-  <section class="sec" id="brief">
-    <p class="eyebrow rise">[1] Коротко</p>
-    <h2 class="h2 rise" style="--d:60ms">Сайт продавал машины, а клиенты <em>приходили за изделиями</em></h2>
-    <div class="tldr">
-      <div class="tl tl-1 rise"><span class="tl-k">Было</span><b class="tl-lead">Сайт про машины, а не про клиента</b><p>Говорил на языке оборудования, не отвечал на частые вопросы и не вёл к заявке. Менеджеры повторяли одни и те же ответы по телефону.</p></div>
-      <svg class="tl-arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      <div class="tl tl-2 rise" style="--d:80ms"><span class="tl-k">Сделала</span><b class="tl-lead">Вопросы клиентов → 9 страниц</b><p>С командой собрали частые вопросы и пожелания заказчика, с SEO-специалистом — скелет сайта. Параллельно обновила брендбук и по нему собрала интерфейс.</p></div>
-      <svg class="tl-arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      <div class="tl tl-3 rise" style="--d:160ms"><span class="tl-k">Стало</span><b class="tl-lead">Ответы до звонка, заявка с ТЗ</b><p>С первого экрана видно, что делает завод. Сроки и кейсы на сайте, заявка уходит сразу с ТЗ — или в мессенджер, если ТЗ нет.</p></div>
-    </div>
-    <dl class="tl-facts rise" style="--d:220ms">
-      <div><dt>3 месяца</dt><dd>от карты сайта до запуска</dd></div>
-      <div><dt>9 страниц</dt><dd>у каждой своя роль</dd></div>
-      <div><dt>6 решений</dt><dd>предложила сама</dd></div>
-      <div><dt>5 человек</dt><dd>в команде</dd></div>
-    </dl>
-    <div class="tldr-ba">
-      <div class="ba-row">
-          <figure class="ba-side rise"><span class="pill pill-line">Было</span><button class="screen ba-shot" type="button" data-full="img/ba_old_home.webp" aria-label="Увеличить старую главную"><img src="img/ba_old_home.webp" loading="lazy" alt="Старая главная: тёмное фото цеха, заголовок «Ротоформовочное оборудование и расходные материалы», контакты внизу."></button>
-            <figcaption><b>Главная</b>Фото цеха и название оборудования. Непонятно, что делает компания для клиента и что нажать дальше.</figcaption></figure>
-          <figure class="ba-side rise" style="--d:100ms"><span class="pill pill-blue">Стало</span><button class="screen ba-shot" type="button" data-full="site/home.webp" aria-label="Открыть новую главную целиком"><img src="img/ba_new_home.webp" loading="lazy" alt="Новая главная: «Разработка изделия из пластмассы под ключ», кнопка «Написать менеджеру», преимущества."></button>
-            <figcaption><b>Главная</b>Оффер одной фразой, одна кнопка и четыре преимущества. Чертёж пресс-формы показывает, чем занимается завод.</figcaption></figure>
-        </div>
+<main class="wrap">
+  <section class="card hero">
+    <p class="role rise">Лада Белык · UI/UX-дизайнер · B2B и цифровые сервисы</p>
+    <h1 class="manifest rise" style="--d:80ms"><span>Ищу в интерфейсах места,</span> <span>где человек спотыкается</span> <span>— и убираю их</span></h1>
+    <p class="about rise" style="--d:160ms"><span>Это началось с наблюдения: менеджеры каждый день отвечали клиентам</span> <span>на одни и те же вопросы. Я перенесла ответы в интерфейс</span> <span>— и с тех пор так работаю.</span></p>
+    <div class="hero-btns rise" style="--d:240ms">
+      <a class="btn btn-fill" href="#cases">смотреть кейсы</a>
+      <a class="btn btn-line" href="resume.html">смотреть резюме</a>
     </div>
   </section>
 
-  <section class="sec" id="context">
-    <p class="eyebrow rise">[2] Контекст и задача</p>
-    <h2 class="h2 rise" style="--d:60ms">Сайт был, но не отвечал <em>на вопросы клиентов</em></h2>
-    <div class="intro rise" style="--d:120ms">
-      <p><b>Ротоснаб</b> — российский инженерно-производственный завод: проектирует пресс-формы, серийно отливает изделия из пластика и сопровождает проекты. Среди клиентов — коммерческие и государственные заказчики.</p>
-      <p>Старый сайт был <b>перегружен текстом</b>: информация не делилась на блоки, ключевое трудно было найти, кейсов не было. Поэтому <b>менеджеры раз за разом отвечали на одни и те же вопросы</b>.</p>
-      <p><b>Задача:</b> перестроить сайт так, чтобы клиент понимал предложение с первого экрана, находил ответы без звонка и видел подтверждение опыта.</p>
-    </div>
-
-    
-    
-    
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Команда и процесс</h3><p class="rise" style="--d:60ms">Три месяца, пять человек. Всё собирали в Figma.</p></div>
-      <div class="team rise">
-        <span class="pill pill-line">Генеральный директор</span><span class="pill pill-line">Коммерческий директор</span><span class="pill pill-line">Маркетолог</span><span class="pill pill-line">SEO-специалист</span><span class="pill pill-blue">Дизайнер — я</span>
-      </div>
-      <ol class="proc">
-        <li class="rise"><b>Карта сайта</b><span>Сначала нарисовали, какие страницы есть и что куда проваливается.</span></li>
-        <li class="rise" style="--d:60ms"><b>Вопросы клиентов</b><span>Собрали, что клиенты чаще всего спрашивают у менеджеров.</span></li>
-        <li class="rise" style="--d:120ms"><b>Пожелания заказчика</b><span>Отдельно собрали, что компания хочет показать на сайте сразу.</span></li>
-        <li class="rise" style="--d:180ms"><b>Скелет с SEO</b><span>Вместе с SEO-специалистом собрали каркас страниц и блоков.</span></li>
-        <li class="rise" style="--d:240ms"><b>Визуал по брендбуку</b><span>Параллельно обновила брендбук и по нему довела интерфейс.</span></li>
-        <li class="rise" style="--d:300ms"><b>Тильда и поддержка</b><span>Сайт на Тильде собрал SEO‑специалист. Я доделала страницы и вела сайт до ухода.</span></li>
-      </ol>
-    </div>
-
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Моя роль</h3><p class="rise" style="--d:60ms">Задачи ставили команда и руководство. Моя часть — превратить их в страницы и интерфейс и предложить решения там, где готовых не было.</p></div>
-      <div class="roles2">
-        <div class="r2 r2-main rise">
-          <div class="r2-head"><b class="r2-num">6</b><div><span class="r2-k">Предложила сама</span><span class="r2-sub">Идеи, которых не было в задаче</span></div></div>
-          <ul class="r2-list"><li><a href="#s-industries"><span>Отрасли на сайте</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li><li><a href="#s-cases"><span>Кейсы отдельной страницей</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li><li><a href="#s-cases"><span>Что выносить на карточку кейса</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li><li><a href="#s-terms"><span>Этапы со сроками</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li><li><a href="#s-exit"><span>Запасной выход</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li><li><a href="#s-managers"><span>Менеджеры по направлениям</span><svg class="ra" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></li></ul>
-        </div>
-        <div class="r2 r2-did rise" style="--d:80ms">
-          <div class="r2-head"><b class="r2-num">5</b><div><span class="r2-k">Делала сама</span><span class="r2-sub">Моя зона ответственности</span></div></div>
-          <ul class="r2-list"><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.3l2.8 2.8 6-6.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Структуру и логику страниц вместе с SEO</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.3l2.8 2.8 6-6.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Интерфейс всех 9 страниц в Figma</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.3l2.8 2.8 6-6.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Обновлённый брендбук и визуальную систему</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.3l2.8 2.8 6-6.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Графику и иллюстрации</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.3l2.8 2.8 6-6.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Доработку страниц на Тильде и поддержку сайта до ухода</span></li></ul>
-        </div>
-        <div class="r2 r2-not rise" style="--d:160ms">
-          <div class="r2-head"><b class="r2-num">4</b><div><span class="r2-k">Не моё</span><span class="r2-sub">Чтобы не было вопросов</span></div></div>
-          <ul class="r2-list"><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg><span>Постановка задач</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg><span>Страницы отдельных кейсов</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg><span>Идея квиза расчёта</span></li><li><svg class="rc" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg><span>Сборка сайта на Тильде</span></li></ul>
-        </div>
-      </div>
-    </div>
+  <section class="card">
+    <h2 class="h2 skills rise"><span>UX-логика</span> <i>//</i> <span>UI</span> <i>//</i> <span>Мобильные и&nbsp;веб-интерфейсы</span></h2>
+    <ul class="how">
+      <li class="rise" style="--d:60ms">
+        <h3>Начинаю с&nbsp;вопросов людей</h3>
+        <p>Собираю, что&nbsp;пользователи спрашивают и&nbsp;где теряются, и&nbsp;строю структуру из&nbsp;этих ответов, а&nbsp;не&nbsp;из&nbsp;списка разделов.</p>
+        <p class="from">Ротоснаб: сайт из&nbsp;вопросов клиентов</p>
+      </li>
+      <li class="rise" style="--d:130ms">
+        <h3>Иду от&nbsp;проблемы к&nbsp;функции</h3>
+        <p>Сначала разбираю, что&nbsp;болит у&nbsp;пользователя, потом показываю функцию, которая это решает. Согласовываю позиции заказчиков.</p>
+        <p class="from">MES-диспетчер: проблема → функция</p>
+      </li>
+      <li class="rise" style="--d:200ms">
+        <h3>Довожу до&nbsp;состояний</h3>
+        <p>Проектирую не&nbsp;только «идеальный» экран, но&nbsp;и&nbsp;ошибки, пустые и&nbsp;нестандартные ситуации&nbsp;— то, на&nbsp;чём спотыкаются чаще всего.</p>
+        <p class="from">Сбер: шесть состояний слота платежа</p>
+      </li>
+    </ul>
+    <ul class="tools rise" aria-label="Инструменты">
+      <li>Figma</li><li>Tilda</li><li>Illustrator</li><li>Photoshop</li><li>After Effects</li><li>ChatGPT</li><li>Claude</li><li>Gemini</li><li>Syntx AI</li><li>Recraft</li>
+    </ul>
   </section>
 
-  <section class="sec" id="structure">
-    <p class="eyebrow rise">[3] Структура</p>
-    <h2 class="h2 rise" style="--d:60ms">Каждый частый вопрос — <em>отдельный блок сайта</em></h2>
-    <div class="intro rise" style="--d:120ms">
-      <p>Вопросы, которые клиенты задавали менеджерам, я превратила в блоки, которые на них отвечают. Из этих блоков выросли страницы.</p>
+  <section class="card" id="cases">
+    <div class="cases-head rise">
+      <h2 class="h2">Избранные проекты</h2>
+      <p>Кейсы по&nbsp;проектированию интерфейсов и&nbsp;цифровых продуктов&nbsp;— от&nbsp;структуры до&nbsp;финального UI.</p>
     </div>
-
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Роль каждой страницы</h3><p class="rise" style="--d:60ms">Работу начали с карты сайта в Figma: что куда проваливается. Каждой странице дали одну роль в пути клиента, и с каждой есть выход на заявку. Нажмите на страницу, чтобы открыть её целиком.</p></div>
-      <div class="roles-map">
-        <div class="rm-root rise">
-          <button class="screen top" type="button" data-full="site/home.webp" aria-label="Открыть главную страницу целиком"><img src="img/t_home.webp" alt="" loading="lazy"></button>
-          <b>Главная</b><span class="rcol-note">Оффер, направления, этапы, заявка</span>
-        </div>
-        <div class="rm-cols">
-        <div class="rcol rise" style="--d:0ms">
-          <button class="screen top" type="button" data-full="site/molds.webp" aria-label="Открыть страницу «Пресс-формы» целиком"><img src="img/t_molds.webp" alt="" loading="lazy"></button>
-          <b>Пресс-формы</b><span class="role-chip">Услуга</span><span class="rcol-note">Этапы изготовления по дням</span>
-        </div>
-        <div class="rcol rise" style="--d:50ms">
-          <button class="screen top" type="button" data-full="site/casting.webp" aria-label="Открыть страницу «Литьё» целиком"><img src="img/t_casting.webp" alt="" loading="lazy"></button>
-          <b>Литьё</b><span class="role-chip">Услуга</span><span class="rcol-note">Мощности, примеры, расчёт</span>
-        </div>
-        <div class="rcol rise" style="--d:100ms">
-          <button class="screen top" type="button" data-full="site/catalog.webp" aria-label="Открыть страницу «Каталог» целиком"><img src="img/t_catalog.webp" alt="" loading="lazy"></button>
-          <b>Каталог</b><span class="role-chip">Продукт</span><span class="rcol-note">Готовые изделия с фильтрами</span>
-        </div>
-        <div class="rcol rise" style="--d:150ms">
-          <button class="screen top" type="button" data-full="site/cases.webp" aria-label="Открыть страницу «Кейсы» целиком"><img src="img/t_cases.webp" alt="" loading="lazy"></button>
-          <b>Кейсы</b><span class="role-chip">Доказательство</span><span class="rcol-note">Результат в заголовке карточки</span>
-        </div>
-        <div class="rcol rise" style="--d:200ms">
-          <button class="screen top" type="button" data-full="site/about.webp" aria-label="Открыть страницу «О компании» целиком"><img src="img/t_about.webp" alt="" loading="lazy"></button>
-          <b>О компании</b><span class="role-chip">Доверие</span><span class="rcol-note">Отрасли, история, команда</span>
-        </div>
-        <div class="rcol rise" style="--d:250ms">
-          <button class="screen top" type="button" data-full="site/career.webp" aria-label="Открыть страницу «Карьера» целиком"><img src="img/t_career.webp" alt="" loading="lazy"></button>
-          <b>Карьера</b><span class="role-chip">Найм</span><span class="rcol-note">Вакансии и культура</span>
-        </div>
-        </div>
-        <div class="rm-goal rise"><span class="pill pill-blue">Заявка</span><span class="pill pill-dark">Контакты</span><span class="rcol-note">С любой страницы — форма или прямой контакт менеджера</span></div>
-      </div>
-      <details class="fullmap rise">
-        <summary>Подробная карта сайта: все страницы и блоки</summary>
-        <button class="screen" type="button" data-full="img/sitemap_full.webp" aria-label="Увеличить карту сайта"><img src="img/sitemap_full.webp" alt="Карта сайта: главная и семь разделов с блоками внутри — О компании, Пресс-формы, Литьё, Кейсы, Каталог, Карьера, Контакты." loading="lazy"></button>
-      </details>
-    </div>
-
-    </section>
-
-  <section class="sec dark" id="solution">
-    <p class="eyebrow rise">[4] Моё решение</p>
-    <h2 class="h2 rise" style="--d:60ms">Сайт: от вопроса клиента <em>к заявке с ТЗ</em></h2>
-    <div class="intro rise" style="--d:120ms"><p>Страницы ведут по сценарию из блока 3: узнать себя, оценить сроки, увидеть опыт — и отправить заявку. <b>Голубой меткой</b> отмечено то, что я предложила сама.</p></div>
-
-<div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Карта решений: вопрос клиента → блок сайта</h3><p class="rise" style="--d:60ms">Решения сгруппированы по трём задачам покупателя. Нажмите на блок, чтобы перейти к нему.</p></div>
-      <div class="qtab rise">
-        <div class="qtab-head"><span>Вопрос клиента</span><span></span><span>Ответ на сайте</span></div>
-        <div class="qtab-row"><div><b><i>[1]</i> «Вы работаете с моей отраслью?»</b><span>Нужно узнать себя среди клиентов</span></div><svg width="90" height="12" viewBox="0 0 90 12" aria-hidden="true"><path d="M0 6h86M81 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg><div><a href="#s-industries">Сетка отраслей</a><br><span>12 отраслей, каждая — узнаваемым предметом</span></div></div>
-        <div class="qtab-row"><div><b><i>[2]</i> «Сколько это займёт?»</b><span>Срок важен ещё до запроса КП</span></div><svg width="90" height="12" viewBox="0 0 90 12" aria-hidden="true"><path d="M0 6h86M81 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg><div><a href="#s-terms">Этапы со сроками</a><br><span>На главной и в пресс-формах, по дням</span></div></div>
-        <div class="qtab-row"><div><b><i>[3]</i> «Почему вам можно доверять?»</b><span>Нужны примеры и результаты</span></div><svg width="90" height="12" viewBox="0 0 90 12" aria-hidden="true"><path d="M0 6h86M81 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg><div><a href="#s-cases">Каталог кейсов</a><br><span>Результат — цифрой в заголовке</span></div></div>
-        <div class="qtab-row"><div><b><i>[4]</i> «Что прислать и с кем говорить?»</b><span>Начать без лишних звонков</span></div><svg width="90" height="12" viewBox="0 0 90 12" aria-hidden="true"><path d="M0 6h86M81 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg><div><a href="#s-form">Форма с ТЗ</a>, <a href="#s-exit">запасной выход</a>, <a href="#s-managers">менеджеры</a><br><span>Три пути к разговору</span></div></div>
-      </div>
-    </div>
-
-    <div class="sub chap">
-      <div class="sub-head"><span class="chap-n rise">Задача клиента 1</span><h3 class="h3 chap-t rise">Понять с первого экрана</h3><p class="rise" style="--d:60ms">Чем занимается завод и работает ли он с моей отраслью. Старый сайт говорил на языке оборудования, новый — на языке задачи клиента.</p></div>
-      <div class="feats">
-      <div class="ba-in" id="s-hero">
-        <h4 class="ba-t rise">Страница услуги: было → стало</h4>
-        <div class="ba">
-        <div class="ba-row">
-          <figure class="ba-side rise"><span class="pill pill-line">Было</span><button class="screen ba-shot" type="button" data-full="img/ba_old_prod.webp" aria-label="Увеличить старую страницу продукции"><img src="img/ba_old_prod.webp" loading="lazy" alt="Старая страница «Наша продукция»: мелкий текст о машинах Шатл, Карусель, Рокнролл, список кнопок и фото станка."></button>
-            <figcaption><b>Продукция</b>Мелкий текст о моделях машин, битые иконки, без цифр и без действия.</figcaption></figure>
-          <figure class="ba-side rise" style="--d:100ms"><span class="pill pill-blue">Стало</span><button class="screen ba-shot" type="button" data-full="site/casting.webp" aria-label="Открыть страницу «Литьё» целиком"><img src="img/ba_new_prod.webp" loading="lazy" alt="Новая страница «Литьё»: заголовок, кнопка «Оставить заявку», цифры производства, станки и примеры изделий."></button>
-            <figcaption><b>Литьё</b>Заголовок о пользе, заявка на первом экране, цифры производства и примеры изделий клиентов.</figcaption></figure>
-        </div>
-      
-        </div>
-      </div>
-      <article class="feat" id="s-industries">
-        <div class="feat-shot rise"><button class="screen fit" type="button" data-full="img/industries.webp" aria-label="Увеличить: Сетка отраслей"><img src="img/d_industries.webp" loading="lazy" alt="Блок «С какими отраслями мы уже работаем»: карточки с объёмными предметами."></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <span class="pill pill-blue">Моё предложение</span>
-          <p class="feat-q">«Вы работаете с моей отраслью?»</p>
-          <h3 class="h3">Сетка отраслей</h3>
-          <p>Двенадцать отраслей, каждая — объёмным предметом: уточка — товары для детей, трактор — спецтехника, корова — агрокомплекс. <b>Предмет узнают быстрее, чем строку в списке</b>, поэтому свою отрасль находят, не читая.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>Список отраслей текстом</b><span>Двенадцать строк читаются медленнее, чем двенадцать предметов, и теряются среди остального текста страницы.</span></div><p class="small-note">Графику для отраслей рисовала сама.</p></div></details>
-        </div>
-      </article>
-      </div>
-    </div>
-    <div class="sub chap">
-      <div class="sub-head"><span class="chap-n rise">Задача клиента 2</span><h3 class="h3 chap-t rise">Сколько, как долго и что нужно от меня</h3><p class="rise" style="--d:60ms">Сроки и вводные до первого звонка.</p></div>
-      <div class="feats">
-      <article class="feat" id="s-terms">
-        <div class="feat-shot rise"><button class="screen fit pair" type="button" data-full="img/moldsteps.webp" aria-label="Увеличить: Этапы со сроками"><img src="img/d_stages.webp" loading="lazy" alt="Этапы сотрудничества на главной и этапы изготовления пресс-форм со сроками."><img src="img/d_moldsteps.webp" loading="lazy" alt=""></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <span class="pill pill-blue">Моё предложение</span>
-          <p class="feat-q">«Сколько это займёт?»</p>
-          <h3 class="h3">Этапы со сроками</h3>
-          <p>Шесть этапов сотрудничества на главной и этапы изготовления пресс-форм по дням. Готовя КП, я заметила, что <b>клиенты первым делом смотрят на сроки</b>, — и предложила показать их до запроса.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>«Сроки обсуждаются индивидуально»</b><span>Честно, но не отвечает на вопрос. Человек всё равно звонит, а диапазон «от 1 до 7 дней» уже помогает планировать.</span></div></div></details>
-        </div>
-      </article>
-      <article class="feat" id="s-form">
-        <div class="feat-shot rise"><button class="screen fit" type="button" data-full="img/form.webp" aria-label="Увеличить: Заявка с ИНН и ТЗ"><img src="img/d_form.webp" loading="lazy" alt="Форма «Получите консультацию и расчёт стоимости» с полем ИНН и кнопкой «Добавить файл (техническое задание)»."></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <p class="feat-q">«Что вам прислать?»</p>
-          <h3 class="h3">Заявка с ИНН и ТЗ</h3>
-          <p>Форма просит название компании, ИНН и файл технического задания. Менеджер получает документы вместе с заявкой — <b>первый звонок не уходит на сбор вводных</b>.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>Форма только с телефоном</b><span>Короче, но тогда первый звонок уходит на сбор вводных. ИНН и файл ТЗ экономят этот звонок, а для тех, у кого ТЗ нет, есть запасной выход.</span></div></div></details>
-        </div>
-      </article>
-      </div>
-    </div>
-    <div class="sub chap">
-      <div class="sub-head"><span class="chap-n rise">Задача клиента 3</span><h3 class="h3 chap-t rise">Доверить разработку</h3><p class="rise" style="--d:60ms">Доказательства опыта и живой человек на другой стороне.</p></div>
-      <div class="feats">
-      <article class="feat" id="s-cases">
-        <div class="feat-shot rise"><button class="screen fit" type="button" data-full="img/cases.webp" aria-label="Увеличить: Каталог кейсов"><img src="img/d_cases.webp" loading="lazy" alt="Каталог кейсов: карточки с логотипом клиента, результатом в заголовке и фото изделия."></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <span class="pill pill-blue">Моё предложение</span>
-          <p class="feat-q">«Почему вам можно доверять?»</p>
-          <h3 class="h3">Каталог кейсов</h3>
-          <p>Отдельная страница кейсов, где <b>результат — цифрой в заголовке карточки</b>: «63 000+ вёдер каждый год», «±0,01 мм погрешность». Его видно, даже если карточку не открывать.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>Кейсы в общей ленте на главной</b><span>Несколько карточек на главной не дают выбрать похожий проект. Отдельная страница собирает все кейсы, а цифра в заголовке работает без открытия карточки.</span></div><p class="small-note">Страницы отдельных кейсов делала не я.</p></div></details>
-        </div>
-      </article>
-      <article class="feat" id="s-managers">
-        <div class="feat-shot rise"><button class="screen fit" type="button" data-full="img/managers.webp" aria-label="Увеличить: Менеджеры по направлениям"><img src="img/d_managers.webp" loading="lazy" alt="Блок «Продажи»: карточки менеджеров с метками направлений, телефоном и почтой."></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <span class="pill pill-blue">Моё предложение</span>
-          <p class="feat-q">«Кому звонить?»</p>
-          <h3 class="h3">Менеджеры по направлениям</h3>
-          <p>Менеджеры сгруппированы по направлениям, телефон и почта — прямо на карточке. <b>Клиент сразу попадает к своему менеджеру</b>, без переадресации через общий номер.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>Один общий номер</b><span>Звонок попадает к случайному человеку, его переадресуют, и клиент ждёт. Менеджер направления отвечает сразу по делу.</span></div></div></details>
-        </div>
-      </article>
-      </div>
-    </div>
-    <div class="sub chap">
-      <div class="sub-head"><span class="chap-n rise">Если клиент не готов к форме</span><h3 class="h3 chap-t rise">Запасной выход</h3><p class="rise" style="--d:60ms">Не у каждого есть ТЗ или 3D-модель. Им — другой путь к разговору.</p></div>
-      <div class="feats">
-      <article class="feat" id="s-exit">
-        <div class="feat-shot rise"><button class="screen fit auto" type="button" data-full="img/fallback.webp" aria-label="Увеличить: Запасной выход"><img src="img/d_exit.webp" loading="lazy" alt="Блок «Нет 3D-модели или не знаете, какой материал подойдёт? Напишите нам» с кнопками мессенджеров."></button></div>
-        <div class="feat-text rise" style="--d:100ms">
-          <span class="pill pill-blue">Моё предложение</span>
-          <p class="feat-q">«А если нет 3D-модели?»</p>
-          <h3 class="h3">Запасной выход</h3>
-          <p>Форма с ТЗ отсекает тех, у кого ТЗ ещё нет. Для них — кнопки Telegram и Max и пример переписки: <b>клиент без ТЗ пишет, а не уходит</b>.</p>
-          <details class="more-d"><summary>Подробнее</summary><div class="more-in"><div class="alt"><span class="alt-k">Почему не так</span><b>Сделать ТЗ обязательным</b><span>Заявки стали бы точнее, но часть клиентов ушла бы без разговора. Мессенджер оставляет им путь.</span></div></div></details>
-        </div>
-      </article>
-      </div>
-      <div class="two-in">
-      <div class="sub-head"><h3 class="h3 rise" style="font-size:20px">Два пути к разговору</h3><p class="rise" style="--d:60ms">Не каждый готов сразу прислать ТЗ, поэтому у формы есть запасной выход.</p></div>
-      <div class="pair2">
-        <div class="side night rise">
-          <span class="pill pill-blue">Основной</span>
-          <ol class="rows">
-            <li><span class="n">01</span><span class="t">Видит оффер на главной</span></li>
-            <li><span class="n">02</span><span class="t">Проверяет сроки по этапам</span></li>
-            <li><span class="n">03</span><span class="t">Выбирает направление</span></li>
-            <li class="hi"><span class="n">04</span><span class="t">Отправляет заявку с ИНН и ТЗ</span></li>
-          </ol>
-        </div>
-        <div class="side light rise" style="--d:100ms">
-          <span class="pill pill-line">Запасной выход</span>
-          <ol class="rows">
-            <li><span class="n">01</span><span class="t">Нет 3D-модели или сомнения в материале</span></li>
-            <li><span class="n">02</span><span class="t">Пишет в Telegram или Max</span></li>
-            <li><span class="n">03</span><span class="t">Или звонит менеджеру направления</span></li>
-          </ol>
-          <p class="note">Клиент без ТЗ <b>не уходит</b>, а начинает разговор.</p>
-        </div>
-      </div>
-    </div>
-    </div>
-  </section>
-
-  <section class="sec" id="visual">
-    <p class="eyebrow rise">[5] Визуал и UI-кит</p>
-    <h2 class="h2 rise" style="--d:60ms">Брендбук, который стал <em>навигацией</em></h2>
-    <div class="intro rise" style="--d:120ms"><p>Параллельно с сайтом я обновила брендбук Ротоснаба и по нему собрала интерфейс: <b>у каждого цвета одна роль</b>, по нему видно направление и главное действие. Графику, включая предметы отраслей, рисовала сама. Отдельного UI-кита на проекте не было — ниже я собрала его постфактум по живому сайту.</p></div>
-
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Основа</h3></div>
-      <div class="basis3">
-        <div class="bcard rise">
-          <p class="label">Цвет</p>
-          <b>Пять цветов, у каждого своя роль</b>
-          <ul class="swatches">
-            <li><i style="background:#00ACF9"></i><code>#00ACF9</code><span>действие, пресс-формы и литьё</span></li>
-            <li><i style="background:#CDEFFF"></i><code>#CDEFFF</code><span>фон акцентных блоков</span></li>
-            <li><i style="background:#FF8156"></i><code>#FF8156</code><span>направление «Поилки для КРС»</span></li>
-            <li><i style="background:#272827"></i><code>#272827</code><span>комплектующие, вторичные кнопки</span></li>
-            <li><i class="lt" style="background:#F7F7F7"></i><code>#F7F7F7</code><span>подложка страниц</span></li>
-          </ul>
-        </div>
-        <div class="bcard rise" style="--d:100ms">
-          <p class="label">Цвет в интерфейсе</p>
-          <b>Направление узнаётся по цвету карточки</b>
-          <button class="dir-shot" type="button" data-full="img/directions.webp" aria-label="Увеличить блок направлений"><img src="img/d_directions.webp" loading="lazy" alt="Блок «Направления»: голубой — пресс-формы, коралловый — поилки для КРС, тёмный — комплектующие."></button>
-          <ul class="dir-key"><li><i style="background:#00ACF9"></i>Пресс-формы и литьё</li><li><i style="background:#FF8156"></i>Поилки для КРС</li><li><i style="background:#272827"></i>Комплектующие</li></ul>
-        </div>
-        <div class="bcard rise" style="--d:80ms">
-          <p class="label">Форма и скругления</p>
-          <b>Скругление 24 на всё</b>
-          <ul class="forms">
-            <li><div class="fx-field" aria-hidden="true">Имя*</div><span class="cap"><b>Поле</b>54 · r24 · без обводки</span></li>
-            <li><div class="fx-btn" aria-hidden="true">Отправить заявку</div><span class="cap"><b>Кнопка</b>48 · r24 · на всю форму</span></li>
-            <li><div class="fx-cards" aria-hidden="true"><i class="fx-card c1"></i><i class="fx-card c2"></i><i class="fx-card c3"></i></div><span class="cap"><b>Карточка</b>r24 · обводка в цвет</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Кнопки</h3><p class="rise" style="--d:60ms">Одно правило на весь сайт: при наведении кнопка меняет заливку на обратную.</p></div>
-      <div class="kit-rows">
-        <div class="kit-row rise">
-          <div class="kit-label"><b>Основная</b><span>Голубая заливка → белая с голубым текстом и мягким свечением</span></div>
-          <figure class="kit-state"><div class="screen kit-shot"><img src="img/kit_btn_def.webp" alt="Кнопка «Написать менеджеру» в обычном состоянии: голубая заливка, белый текст." loading="lazy"></div><figcaption>Обычное</figcaption></figure>
-          <figure class="kit-state"><div class="screen kit-shot"><img src="img/kit_btn_hov.webp" alt="Кнопка «Написать менеджеру» при наведении: белая заливка, голубой текст, голубое свечение." loading="lazy"></div><figcaption>Наведение</figcaption></figure>
-        </div>
-        <div class="kit-row rise">
-          <div class="kit-label"><b>В карточке направления</b><span>То же правило: голубая → белая с голубым текстом</span></div>
-          <figure class="kit-state"><div class="screen kit-shot"><img src="img/kit_card_hov.webp" alt="Кнопка «Перейти на сайт» в карточке направления: голубая заливка, белый текст." loading="lazy"></div><figcaption>Обычное</figcaption></figure>
-          <figure class="kit-state"><div class="screen kit-shot"><img src="img/kit_card_def.webp" alt="Кнопка «Перейти на сайт» при наведении: белая заливка, голубой текст." loading="lazy"></div><figcaption>Наведение</figcaption></figure>
-        </div>
-      </div>
-    </div>
-
-    <div class="sub">
-      <div class="sub-head"><h3 class="h3 rise">Форма заявки: от пустой до отправки</h3><p class="rise" style="--d:60ms">Три состояния с живого сайта.</p></div>
-      <div class="kit-form">
-        <figure class="kit-state rise"><button class="screen kit-shot" type="button" data-full="img/kit_form_empty.webp" aria-label="Увеличить пустую форму"><img src="img/kit_form_empty.webp" alt="Пустая форма: поля «Имя*», «Название компании*», «ИНН», «Номер телефона», «Электронная почта*»." loading="lazy"></button><figcaption><b>Пустая</b>Обязательные поля отмечены звёздочкой в подсказке</figcaption></figure>
-        <figure class="kit-state rise" style="--d:80ms"><button class="screen kit-shot" type="button" data-full="img/kit_form_focus.webp" aria-label="Увеличить форму с фокусом на телефоне"><img src="img/kit_form_focus.webp" alt="Фокус на поле телефона: появляется маска +7 (___) ___-__-__." loading="lazy"></button><figcaption><b>Фокус на телефоне</b>Появляется маска +7 (___) ___-__-__ — формат подсказан заранее</figcaption></figure>
-        <figure class="kit-state rise" style="--d:160ms"><button class="screen kit-shot" type="button" data-full="img/kit_form_send.webp" aria-label="Увеличить заполненную форму во время отправки"><img src="img/kit_form_send.webp" alt="Заполненная форма во время отправки: кнопка стала белой с голубой обводкой и индикатором загрузки." loading="lazy"></button><figcaption><b>Отправка</b>Кнопка становится белой с обводкой и индикатором — повторно не нажать</figcaption></figure>
-      </div>
-    </div>
-
-    <div class="sub kit">
-      <div class="sub-head"><h3 class="h3 rise">Чего не хватало: ошибки и успех</h3><p class="rise" style="--d:60ms">На сайте поле с ошибкой никак не подсвечивается, а после отправки нет понятного ответа. Я достроила эти состояния в том же стиле — попробуйте отправить пустую форму. Данные никуда не уходят.</p></div>
-      <div class="live">
-        <form class="lform rise" id="kitForm" novalidate>
-          <div id="kitFields" style="display:flex;flex-direction:column;gap:14px">
-            <h4>Получите консультацию и расчёт стоимости</h4>
-            <div class="k-field"><input class="k-input" id="kf-name" name="name" type="text" placeholder="Имя*" autocomplete="name" aria-label="Имя, обязательно" aria-describedby="kf-name-msg"><span class="k-msg" id="kf-name-msg" aria-live="polite"></span></div>
-            <div class="row2">
-              <div class="k-field"><input class="k-input" id="kf-company" name="company" type="text" placeholder="Название компании*" autocomplete="organization" aria-label="Название компании, обязательно" aria-describedby="kf-company-msg"><span class="k-msg" id="kf-company-msg" aria-live="polite"></span></div>
-              <div class="k-field"><input class="k-input" id="kf-inn" name="inn" type="text" inputmode="numeric" placeholder="ИНН" aria-label="ИНН" aria-describedby="kf-inn-msg"><span class="k-msg" id="kf-inn-msg" aria-live="polite"></span></div>
-            </div>
-            <div class="row2">
-              <div class="k-field"><input class="k-input" id="kf-phone" name="phone" type="tel" inputmode="tel" placeholder="Номер телефона" autocomplete="tel" aria-label="Номер телефона"></div>
-              <div class="k-field"><input class="k-input" id="kf-email" name="email" type="email" placeholder="Электронная почта*" autocomplete="email" aria-label="Электронная почта, обязательно" aria-describedby="kf-email-msg"><span class="k-msg" id="kf-email-msg" aria-live="polite"></span></div>
-            </div>
-            <div class="k-field">
-              <label class="k-check" id="kf-agree-wrap"><input type="checkbox" id="kf-agree"> Согласен на <u>обработку персональных данных</u></label>
-              <span class="k-msg" id="kf-agree-msg" aria-live="polite"></span>
-            </div>
-            <div id="kf-file-slot"><button class="k-file empty" type="button" id="kf-file-btn"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg>Добавить файл [техническое задание]</button></div>
-            <input type="file" id="kf-file" hidden accept=".pdf,.doc,.docx,.step,.stp,.stl,.dwg,.zip">
-            <span class="k-msg" id="kf-file-msg" aria-live="polite"></span>
-            <button class="k-btn k-blue" type="submit" id="kf-submit">Отправить заявку</button>
+    <div class="grid">
+      <a class="case wide rise" href="sber/index.html">
+        <div class="m"><div class="m-vis"><img src="sber/img/cover_devices.webp" alt="" loading="lazy"></div><div class="m-body"><p class="m-eye">Мобильное приложение · финтех</p><p class="m-title">СберБанк Онлайн</p><p class="m-sub">Как показать, куда ушли деньги с&nbsp;кредитки</p><div class="m-chips"><span>UI/UX-дизайн</span><span>Инициативный кейс</span><span>5 дней</span></div><p class="m-status"><i style="background:#8E8E8A"></i>Концепт</p><span class="m-btn">Смотреть кейс</span></div></div>
+        <div class="shot"><img src="sber/img/00_cover.webp" alt="Обложка кейса про кредитную карту СберБанк Онлайн"></div>
+        <div class="cap"><b>СберБанк Онлайн · кредитная карта</b><span class="sub"><b>Мобильный банк:</b> как показать, куда ушли <b>деньги с&nbsp;кредитки</b> · 5&nbsp;дней</span><span class="go">Смотреть кейс →</span></div>
+      </a>
+      <a class="case rise" href="mes/index.html">
+        <div class="m"><div class="m-vis"><img src="mes/img/cover_devices.webp" alt="" loading="lazy"></div><div class="m-body"><p class="m-eye">Веб · B2B-продукт</p><p class="m-title">MES-диспетчер</p><p class="m-sub">Как объяснить сложный B2B-продукт тем, кто его ещё не&nbsp;видел</p><div class="m-chips"><span>UI/UX-дизайн</span><span>Весь проект</span><span>1,5 месяца</span></div><p class="m-status"><i style="background:#F5C55E"></i>Готов к&nbsp;запуску</p><span class="m-btn">Смотреть кейс</span></div></div>
+        <div class="shot"><img src="mes/img/0_cover.webp" alt="Обложка кейса MES-диспетчер"></div>
+        <div class="cap"><b>MES-диспетчер</b><span class="sub"><b>Лендинг</b> для&nbsp;сложного <b>B2B-продукта</b> · 1,5&nbsp;месяца</span><span class="go">Смотреть кейс →</span></div>
+      </a>
+      <a class="case rise" style="--d:80ms" href="roto/index.html">
+        <div class="m m-roto"><div class="m-vis"><img src="roto/img/cover_visual.webp" alt="" loading="lazy"></div><div class="m-body"><p class="m-eye">Веб · B2B-сайт</p><p class="m-title">Ротоснаб</p><p class="m-sub">Сайт, который отвечает клиенту раньше менеджера</p><div class="m-chips"><span>UI/UX-дизайн</span><span>Команда из 5</span><span>3 месяца</span></div><p class="m-status"><i style="background:#3DD68C"></i>Запущен</p><span class="m-btn">Смотреть кейс</span></div></div>
+        <div class="shot"><div class="rc"><div class="rc-in">
+          <div class="rc-text">
+            <p class="rc-eye">Кейс: Ротоснаб <span>· веб · B2B-сайт</span></p>
+            <p class="rc-h">Сайт, который отвечает клиенту раньше менеджера</p>
+            <p class="rc-lede">Путь от <b>вопросов клиентов</b> к <b>структуре и интерфейсу</b> сайта</p>
+            <div class="rc-btns" aria-hidden="true"><span class="rc-b1">Смотреть решение</span><span class="rc-b2">Живой сайт ↗</span></div>
+            <div class="rc-meta"><p><i>Роль</i><em>UI/UX-дизайнер в команде из 5 человек</em></p><p><i>Что сделала</i><em>Исследование, структура, UI, иллюстрации</em></p><p><i>Срок</i><em>3 месяца</em></p><p><i>Статус</i><em>Запущен, rotosnab.ru</em></p></div>
           </div>
-          <div class="done" id="kitDone" hidden>
-            <i><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-8.5" fill="none" stroke="#00ACF9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></i>
-            <b>Заявка отправлена</b>
-            <p>Менеджер направления свяжется с вами по почте или телефону и уточнит детали.</p>
-            <button class="k-btn k-line" type="button" id="kf-again" style="width:auto">Заполнить ещё раз</button>
-          </div>
-        </form>
-        <div class="rules">
-          <div class="rule rise"><b>Ошибка появляется после ухода из поля</b><span>Не ругаем, пока человек печатает. Исправил — ошибка исчезает сразу.</span></div>
-          <div class="rule rise" style="--d:60ms"><b>Текст ошибки говорит, что делать</b><span><q>ИНН — 10 или 12 цифр</q> вместо <q>Неверный формат</q>.</span></div>
-          <div class="rule rise" style="--d:120ms"><b>Звёздочки там же, где на сайте</b><span>Обязательны имя, компания и почта. Телефон и ИНН помогают менеджеру, но не блокируют отправку.</span></div>
-          <div class="rule rise" style="--d:180ms"><b>Кнопка не выключается заранее</b><span>Неактивная кнопка не объясняет, чего не хватает. Пустую форму можно отправить — и увидеть все ошибки сразу.</span></div>
-          <div class="rule rise" style="--d:240ms"><b>После отправки — что дальше</b><span>Человек видит, кто и как с ним свяжется, а не просто «Спасибо».</span></div>
-        </div>
-      </div>
-    </div>
-      <p class="small kit-note rise">Ошибки и экран успеха — моё предложение, на сайте их нет. Маска телефона и состояние отправки повторяют живой сайт.</p>
+          <img class="rc-vis" src="roto/img/cover_visual.webp" width="1100" height="880" alt="">
+        </div></div></div>
+        <div class="cap"><b>Ротоснаб</b><span class="sub"><b>Редизайн</b> корпоративного <b>B2B-сайта</b> · 3&nbsp;месяца</span><span class="go">Смотреть кейс →</span></div>
+      </a>
     </div>
   </section>
 
-  
-
-  <section class="sec dark" id="result">
-    <p class="eyebrow rise">[6] Итог</p>
-    <h2 class="h2 rise" style="--d:60ms">Итог: сайт работает, но данных у меня нет</h2>
-    <div class="intro rise" style="--d:120ms"><p>Доступа к аналитике у меня не было, поэтому вот как я оценила бы результат и что сделала бы иначе.</p></div>
-    <div class="glass">
-      <div class="gcard rise">
-        <span class="pill pill-blue">Что измерила бы</span>
-        <ol>
-          <li><b><i>[1]</i> Доля заявок с ТЗ</b><span>Работает ли форма с ИНН и файлом</span></li>
-          <li><b><i>[2]</i> Вопросы к менеджерам</b><span>Стало ли меньше «сколько и как долго»</span></li>
-          <li><b><i>[3]</i> Переходы в заявку</b><span>Со страниц отраслей и кейсов</span></li>
-          <li><b><i>[4]</i> Запасной выход</b><span>Сколько обращений приходит через мессенджеры</span></li>
-        </ol>
-      </div>
-      <div class="gcard rise" style="--d:100ms">
-        <span class="pill pill-blue">Что сделала бы иначе</span>
-        <ol>
-          <li><b><i>[1]</i> UI-кит с первого дня</b><span>Компоненты с состояниями ускорили бы правки и держали стиль. После моего ухода на сайте появилось много блоков вне фирменного стиля — кит с правилами это бы сдерживал.</span></li>
-          <li><b><i>[2]</i> Отдельная мобильная версия</b><span>Сейчас работает автоадаптация. А B2B-клиенты часто открывают сайт с телефона — по ссылке от менеджера.</span></li>
-        </ol>
-      </div>
-    </div>
-    <p class="limits rise">Скриншоты — версия сайта на момент моей работы: интерфейс на Тильде собирал SEO-специалист, я доделывала страницы и поддерживала сайт до ухода из компании. После меня добавили много новых блоков, и они отличаются от фирменного стиля. Поэтому живой сайт выглядит иначе, чем в кейсе.</p>
-  </section>
-
-  <section class="end" aria-label="Дальше">
-    <a class="btn btn-blue" href="https://rotosnab.ru/" target="_blank" rel="noopener">Живой сайт ↗</a>
+  <section class="card contacts rise">
+    <h2 class="h2">Контакты:</h2>
+    <p>тел: +7&nbsp;(925)&nbsp;134&nbsp;80&nbsp;41<br>telegram: <a href="https://t.me/oladyshekb" target="_blank" rel="noopener">@oladyshekb</a></p>
   </section>
 </main>
 
-<dialog class="zoom" id="zoom" aria-label="Увеличенный скриншот">
-  <div class="zoom-body"><button class="zoom-close" type="button" id="zoomClose" aria-label="Закрыть">×</button><img id="zoomImg" alt=""></div>
-</dialog>
-
 <script>
+/* Entrance: each part rises once as its section comes into view */
 (function () {
-  var parts = Array.prototype.slice.call(document.querySelectorAll('.rise'));
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    parts.forEach(function (p) { io.observe(p); });
-  } else { parts.forEach(function (p) { p.classList.add('in'); }); }
-  setTimeout(function () { parts.forEach(function (p) { if (p.getBoundingClientRect().top < window.innerHeight) p.classList.add('in'); }); }, 1200);
-
-  var links = Array.prototype.slice.call(document.querySelectorAll('.menu a'));
-  var menu = document.querySelector('.menu');
-  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
-  var current = -2, pinned = null, pinTimer;
-  function setActive(i) {
-    if (i === current) return;
-    current = i;
-    links.forEach(function (a, k) {
-      a.classList.toggle('active', k === i);
-      if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
-    });
-    if (i >= 0) {
-      var a = links[i], l = a.offsetLeft, r = l + a.offsetWidth;
-      if (l < menu.scrollLeft || r > menu.scrollLeft + menu.clientWidth) menu.scrollTo({ left: l - 16, behavior: 'smooth' });
-    }
-  }
-  function onScroll() {
-    if (pinned !== null) return;
-    var probe = window.innerHeight * 0.35, idx = -1;
-    sections.forEach(function (s, k) { if (s && s.getBoundingClientRect().top <= probe) idx = k; });
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) idx = sections.length - 1;
-    setActive(idx);
-  }
-  links.forEach(function (a, k) {
-    a.addEventListener('click', function () {
-      pinned = k; setActive(k);
-      clearTimeout(pinTimer); pinTimer = setTimeout(function () { pinned = null; onScroll(); }, 900);
-    });
-  });
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  onScroll();
-
-
-  // ---- UI kit: live form ----
-  var kf = document.getElementById('kitForm');
-  if (kf) {
-    var inn = document.getElementById('kf-inn'), email = document.getElementById('kf-email'), agree = document.getElementById('kf-agree');
-    var innMsg = document.getElementById('kf-inn-msg'), emailMsg = document.getElementById('kf-email-msg'), agreeMsg = document.getElementById('kf-agree-msg');
-    var agreeWrap = document.getElementById('kf-agree-wrap'), fileIn = document.getElementById('kf-file'), slot = document.getElementById('kf-file-slot'), fileMsg = document.getElementById('kf-file-msg');
-    var submit = document.getElementById('kf-submit'), fields = document.getElementById('kitFields'), done = document.getElementById('kitDone');
-    var touched = {};
-    var nameIn = document.getElementById('kf-name'), compIn = document.getElementById('kf-company'), phoneIn = document.getElementById('kf-phone');
-    var nameMsg = document.getElementById('kf-name-msg'), compMsg = document.getElementById('kf-company-msg');
-    function checkReq(el, msgEl, text) { if (!el.value.trim()) { setErr(el, msgEl, text); return false; } setErr(el, msgEl, ''); return true; }
-    function checkName() { return checkReq(nameIn, nameMsg, 'Напишите, как к вам обращаться'); }
-    function checkComp() { return checkReq(compIn, compMsg, 'Укажите компанию — так менеджер найдёт вашу заявку'); }
-    nameIn.addEventListener('blur', function () { touched.name = true; checkName(); });
-    nameIn.addEventListener('input', function () { if (touched.name) checkName(); });
-    compIn.addEventListener('blur', function () { touched.comp = true; checkComp(); });
-    compIn.addEventListener('input', function () { if (touched.comp) checkComp(); });
-    // Phone mask, as on the live site: +7 (___) ___-__-__
-    function maskPhone() {
-      var d = phoneIn.value.replace(/\D/g, ''); if (d.charAt(0) === '7' || d.charAt(0) === '8') d = d.slice(1); d = d.slice(0, 10);
-      var t = '+7 (___) ___-__-__', k = 0; phoneIn.value = t.replace(/_/g, function () { return k < d.length ? d.charAt(k++) : '_'; });
-      var pos = phoneIn.value.indexOf('_'); if (pos < 0) pos = phoneIn.value.length; try { phoneIn.setSelectionRange(pos, pos); } catch (e) {}
-    }
-    phoneIn.addEventListener('focus', function () { if (!phoneIn.value) maskPhone(); });
-    phoneIn.addEventListener('input', maskPhone);
-    phoneIn.addEventListener('blur', function () { if (!/\d/.test(phoneIn.value.slice(2))) phoneIn.value = ''; });
-    var CLIP = '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg>';
-    function setErr(el, msgEl, text) {
-      if (text) { el.setAttribute('aria-invalid', 'true'); msgEl.textContent = text; }
-      else { el.removeAttribute('aria-invalid'); msgEl.textContent = ''; }
-    }
-    function checkInn() {
-      var v = inn.value.replace(/\s/g, '');
-      if (v && !/^\d+$/.test(v)) return setErr(inn, innMsg, 'В ИНН только цифры'), false;
-      if (v && v.length !== 10 && v.length !== 12) return setErr(inn, innMsg, 'ИНН — 10 или 12 цифр'), false;
-      setErr(inn, innMsg, ''); return true;
-    }
-    function checkEmail() {
-      var v = email.value.trim();
-      if (!v) return setErr(email, emailMsg, 'Укажите почту — на неё придёт расчёт'), false;
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return setErr(email, emailMsg, 'Проверьте адрес: не хватает @ или домена'), false;
-      setErr(email, emailMsg, ''); return true;
-    }
-    function checkAgree() {
-      if (!agree.checked) { agreeWrap.classList.add('is-err'); agreeMsg.textContent = 'Без согласия не сможем принять заявку'; return false; }
-      agreeWrap.classList.remove('is-err'); agreeMsg.textContent = ''; return true;
-    }
-    inn.addEventListener('blur', function () { touched.inn = true; checkInn(); });
-    inn.addEventListener('input', function () { if (touched.inn) checkInn(); });
-    email.addEventListener('blur', function () { touched.email = true; checkEmail(); });
-    email.addEventListener('input', function () { if (touched.email) checkEmail(); });
-    agree.addEventListener('change', function () { if (touched.agree) checkAgree(); });
-
-    function emptyFile() {
-      slot.innerHTML = '<button class="k-file empty" type="button" id="kf-file-btn">' + CLIP + 'Добавить файл [техническое задание]</button>';
-      document.getElementById('kf-file-btn').addEventListener('click', function () { fileIn.click(); });
-      fileMsg.textContent = '';
-    }
-    function showFile(name, size) {
-      var mb = (size / 1048576).toFixed(1).replace('.', ',');
-      if (size > 20 * 1048576) {
-        slot.innerHTML = '<div class="k-file bad">Файл больше 20 МБ — сожмите или пришлите ссылкой</div>';
-        setTimeout(emptyFile, 2600); return;
-      }
-      slot.innerHTML = '<div class="k-file has"><span>' + CLIP + ' </span><button class="k-x" type="button" aria-label="Удалить файл">×</button></div>';
-      var label = slot.querySelector('span'); var t = document.createElement('span'); t.textContent = name + ' '; var sm = document.createElement('small'); sm.textContent = mb + ' МБ';
-      label.appendChild(t); label.appendChild(sm);
-      slot.querySelector('.k-x').addEventListener('click', emptyFile);
-    }
-    document.getElementById('kf-file-btn').addEventListener('click', function () { fileIn.click(); });
-    fileIn.addEventListener('change', function () { var f = fileIn.files && fileIn.files[0]; if (f) showFile(f.name, f.size); fileIn.value = ''; });
-
-    kf.addEventListener('submit', function (e) {
-      e.preventDefault();
-      touched.inn = touched.email = touched.agree = touched.name = touched.comp = true;
-      var ok = [checkName(), checkComp(), checkEmail(), checkInn(), checkAgree()].every(Boolean);
-      if (!ok) { var first = kf.querySelector('[aria-invalid="true"], .is-err input'); if (first) first.focus(); return; }
-      submit.disabled = false; submit.setAttribute('aria-busy', 'true');
-      submit.innerHTML = '<span class="k-spin" aria-hidden="true"></span>Отправляем…';
-      setTimeout(function () { fields.hidden = true; done.hidden = false; submit.removeAttribute('aria-busy'); submit.textContent = 'Отправить заявку'; }, 1100);
-    });
-    document.getElementById('kf-again').addEventListener('click', function () {
-      kf.reset(); touched = {}; [inn, email, nameIn, compIn].forEach(function (el) { el.removeAttribute('aria-invalid'); });
-      innMsg.textContent = emailMsg.textContent = agreeMsg.textContent = nameMsg.textContent = compMsg.textContent = ''; agreeWrap.classList.remove('is-err'); emptyFile();
-      done.hidden = true; fields.hidden = false;
-    });
-  }
-  // demo tabs
-  document.querySelectorAll('.k-tabs[role="group"]').forEach(function (g) {
-    g.querySelectorAll('.k-tab').forEach(function (b) { b.addEventListener('click', function () { g.querySelectorAll('.k-tab').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }); });
-  });
-
-  var dlg = document.getElementById('zoom'), zImg = document.getElementById('zoomImg');
-  document.querySelectorAll('[data-full]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      zImg.src = b.getAttribute('data-full');
-      zImg.alt = b.getAttribute('aria-label') || '';
-      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
-      dlg.querySelector('.zoom-body').scrollTop = 0;
-    });
-  });
-  document.getElementById('zoomClose').addEventListener('click', function () { dlg.close(); });
-  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  var els = Array.prototype.slice.call(document.querySelectorAll('.rise'));
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function (e) { io.observe(e); });
+  setTimeout(function () { els.forEach(function (e) { if (e.getBoundingClientRect().top < innerHeight) e.classList.add('in'); }); }, 50);
 })();
+
 </script>
 
 </body></html>

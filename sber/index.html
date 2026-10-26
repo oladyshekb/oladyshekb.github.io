@@ -1,0 +1,392 @@
+<!doctype html><html lang="ru"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Кейс: кредитка Сбера</title>
+<style>
+/* Phone cover: the cover picture is replaced by a stacked layout (text → buttons → visual → facts as tiles) */
+.mcov { display: none; }
+@media (max-width: 700px) {
+  #top > img, #top > .endbar, #top > .endbtns { display: none !important; }
+  .mcov { display: flex; flex-direction: column; background: #060606; color: #FFFFFF; font-family: var(--font); padding: 24px 0 8px; }
+  .mc-eye { margin: 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: #E8EBEF; }
+  .mc-eye span { color: #9EA5AE; }
+  .mc-h { margin: 16px 0 0; font-size: clamp(30px, 9vw, 40px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+  .mc-lede { margin: 16px 0 0; font-size: 17px; line-height: 1.4; color: #A9B0BA; }
+  .mc-lede b { color: #FFFFFF; font-weight: 500; }
+  .mc-btns { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .mc-btns .cb { width: 100%; min-width: 0; height: 54px; font-size: 18px; border-radius: 13px; }
+  .mc-vis { display: block; width: calc(100% + 16px); max-width: none; height: auto; margin: 24px -8px 0; }
+  .mc-meta { margin: 24px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .mc-meta div { padding: 16px; border-radius: 18px; background: #141414; border: 1px solid rgba(255,255,255,.08); min-width: 0; }
+  .mc-meta dt { font-size: 15px; color: #9EA5AE; }
+  .mc-meta dd { margin: 10px 0 0; font-size: 17px; line-height: 1.3; color: #FFFFFF; }
+}
+</style>
+
+<style>
+/* Cover buttons: same pair on every case cover, matching the portfolio main page */
+.cb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: clamp(30px, 3.6cqw, 52px); min-width: clamp(120px, 18cqw, 259px); padding: 0 1.2em; border-radius: clamp(8px, .9cqw, 13px); font: 400 clamp(11px, 1.18cqw, 17px) var(--font); text-decoration: none; white-space: nowrap; border: 1px solid #FFFFFF; transition: background-color .2s, color .2s, border-color .2s, box-shadow .25s; }
+.cb-fill { background: #FFFFFF; color: #121212; }
+.cb-line { background: transparent; color: #FFFFFF; }
+.cb:hover, .cb:focus-visible { background: #24B23E; border-color: #24B23E; color: #FFFFFF; box-shadow: 0 0 24px rgba(36,178,62,.55), 0 0 6px rgba(36,178,62,.75); outline: none; }
+@media (prefers-reduced-motion: reduce) { .cb { transition: none; } }
+.endbtns.cover { gap: clamp(8px, 1cqw, 14px); }
+</style>
+<script>
+/* Open every case at its cover, not wherever the previous page was scrolled */
+(function () {
+  try { history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) return;
+  var top = function () { window.scrollTo(0, 0); };
+  top(); document.addEventListener('DOMContentLoaded', top); window.addEventListener('load', top);
+})();
+</script>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky nav with an active-section indicator over a stack of full-width section images (single dark look, as in the case) */
+:root {
+  --bg: #060606;
+  --line: #1C1C1C;
+  --rule: #1B1B1B;
+  --orange: #F48B50;
+  --text-2: #D6D6D6;
+  --text-3: #B2B2B2;
+  --check-bg: #15391D;
+  --fg: #FFFFFF;
+  --muted: #8F8F8F;
+  --green: #24B23E;
+  --button: #168E2C;
+  --toast: #1E1E1E;
+  --font: "Golos Text", "Helvetica Neue", Arial, sans-serif;
+  --nav-h: 76px;
+  color-scheme: dark;
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: rgba(6,6,6,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  max-width: 1440px; margin: 0 auto; height: var(--nav-h);
+  display: flex; align-items: center; gap: 24px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 1100px) { .nav-inner { padding-left: max(64px, env(safe-area-inset-left, 0px)); padding-right: max(56px, env(safe-area-inset-right, 0px)); } }
+.back { flex: 0 0 auto; color: var(--green); text-decoration: none; font-size: 16px; white-space: nowrap; }
+.back:hover { color: #3fd45a; }
+.nav-links { flex: 1 1 auto; min-width: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  position: relative; flex: 0 0 auto; padding: 10px 16px;
+  color: var(--muted); text-decoration: none; font-size: 17px; font-weight: 400; white-space: nowrap;
+  border-radius: 10px; transition: color .2s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-links a.active { color: var(--fg); }
+.nav-links a::before {
+  content: ""; position: absolute; left: 2px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px;
+  border-radius: 50%; background: var(--green); opacity: 0; transform: scale(.4); transition: opacity .2s, transform .2s;
+}
+.nav-links a.active::before { opacity: 1; transform: scale(1); }
+.nav-links a:focus-visible, .cta:focus-visible, .hot:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.cta {
+  flex: 0 0 auto; display: inline-flex; align-items: center; text-decoration: none; justify-content: center; height: 51px; min-width: 259px; padding: 0 32px; box-sizing: border-box;
+  border: 0; border-radius: 12px; background: var(--button); color: var(--fg);
+  font: 500 17px var(--font); cursor: pointer;
+}
+.cta:hover { background: #1a9e33; }
+.progress {
+  position: absolute; left: 0; bottom: -1px; height: 2px; width: 0;
+  background: var(--green); box-shadow: 0 0 10px rgba(36,178,62,.6);
+  transition: width .35s ease;
+}
+@media (prefers-reduced-motion: reduce) { .progress, .nav-links a::before { transition: none; } }
+
+main {
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+@media (min-width: 1472px) { main { padding-left: 0; padding-right: 0; } }
+section { max-width: 1440px; margin: 0 auto; position: relative; scroll-margin-top: var(--nav-h); container-type: inline-size; }
+
+/* Коротко: live checklist laid over the image, equal gaps */
+.kfix { position: absolute; background: var(--bg); font-size: 1.667cqw; padding: .55em 0 0 .833em; }
+.kfix ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .75em; }
+.kfix li { display: flex; align-items: flex-start; gap: .833em; line-height: 1.35; color: var(--fg); }
+.kfix .ck { flex: 0 0 1.667em; height: 1.667em; margin-top: -.158em; border-radius: 50%; background: var(--check-bg); display: grid; place-items: center; }
+.kfix .ck svg { width: .8em; height: .8em; }
+
+/* Механика: accordion */
+.rules { padding-inline: 8.333cqw; }
+.rule { border-top: 1px solid var(--rule); }
+.rule:last-child { border-bottom: 1px solid var(--rule); }
+.rule-head {
+  width: 100%; display: grid; grid-template-columns: clamp(40px, 6.111cqw, 88px) minmax(0, 1fr) 24px; align-items: baseline;
+  padding: clamp(22px, 3.75cqw, 54px) 0 clamp(26px, 4.17cqw, 60px); background: none; border: 0; color: var(--fg);
+  text-align: left; font-family: var(--font); cursor: pointer;
+}
+.rule.open .rule-head { padding-bottom: 0; }
+.rule-num { color: var(--green); font-weight: 700; font-size: clamp(13px, 1.25cqw, 18px); }
+.rule-title { font-size: clamp(17px, 1.944cqw, 28px); font-weight: 500; line-height: 1.3; text-wrap: balance; }
+.rule-head:hover .rule-title { color: #E4F5E7; }
+.chev { align-self: center; width: 20px; height: 20px; color: var(--text-3); transition: transform .3s, color .3s; }
+.rule.open .chev { transform: rotate(180deg); color: var(--green); }
+.rule-head:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; border-radius: 6px; }
+.rule-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+.rule.open .rule-panel { grid-template-rows: 1fr; }
+.rule-inner { overflow: hidden; min-height: 0; padding-left: clamp(40px, 6.111cqw, 88px); }
+.rule-body { padding: clamp(14px, 1.53cqw, 22px) 0 clamp(26px, 3.9cqw, 56px); max-width: 47cqw; min-width: 0; }
+@media (max-width: 760px) { .rule-body { max-width: none; } }
+.rule-body p { margin: 0; }
+.rule-text { font-size: clamp(15px, 1.39cqw, 20px); line-height: 1.8; color: var(--text-2); }
+.rule-ex { margin-top: clamp(14px, 1.53cqw, 22px) !important; font-size: clamp(15px, 1.39cqw, 20px); line-height: 1.55; color: var(--orange); }
+.rule-ex b { display: block; font-weight: 600; }
+.rule-now { margin-top: clamp(14px, 1.53cqw, 22px) !important; font-size: clamp(13px, 1.18cqw, 17px); line-height: 1.75; color: var(--text-3); max-width: 34em; }
+.rule-now b { color: var(--fg); font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .rule-panel, .chev { transition: none; } }
+.endbar { position: absolute; background: var(--bg); }
+.endbtns { position: absolute; left: 8.333cqw; display: flex; gap: clamp(5px, 1.077cqw, 14px); transform: translateY(-2px); }
+.endbtns.cover { left: 5.556cqw; transform: translateY(-50%); }
+/* Same size as the MES cover buttons (259×51, radius 12 at 1440), scaled down with the page on narrow screens */
+.eb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: clamp(20px, 3.92cqw, 51px); min-width: clamp(80px, 19.92cqw, 259px); padding: 0 clamp(6px, 2.46cqw, 32px); border-radius: clamp(5px, .923cqw, 12px); font: 500 clamp(8px, 1.308cqw, 17px) var(--font); color: var(--fg); text-decoration: none; white-space: nowrap; }
+.eb-primary { background: var(--button); }
+.eb-primary:hover { background: #1a9e33; }
+.eb-sec { background: #262A2B; border: 1.5px solid #FFFFFF; }
+.eb-sec:hover { background: #222222; }
+.eb:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.src { position: absolute; display: block; border-radius: 4px; }
+.src:hover { background: rgba(36,178,62,.12); }
+.src:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+section img { display: block; width: 100%; height: auto; }
+.hot {
+  position: absolute; display: block; border: 0; padding: 0; background: transparent; cursor: pointer;
+  border-radius: 1.4% / 6%;
+}
+.hot:hover { background: rgba(255,255,255,.06); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px);
+  max-width: calc(100% - 32px); padding: 14px 20px; border-radius: 14px;
+  background: var(--toast); border: 1px solid #333; color: var(--fg); font-size: 15px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 640px) {
+  :root { --nav-h: 60px; }
+  .nav-links a { font-size: 15px; padding: 8px 14px; }
+  .cta { height: 38px; min-width: 0; padding: 0 16px; font-size: 15px; }
+}
+</style>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="back" href="../index.html#cases">← Все кейсы</a>
+    <nav class="nav-links" aria-label="Разделы кейса">
+      <a href="#korotko">Коротко</a>
+      <a href="#mehanika">Механика</a>
+      <a href="#issledovanie">Исследование</a>
+      <a href="#principy">Принципы</a>
+      <a href="#reshenie">Решение</a>
+      <a href="#sostoyaniya">Состояния</a>
+      <a href="#iteracii">Итерации</a>
+      <a href="#yazyk">Язык</a>
+      <a href="#dalshe">Что дальше</a>
+    </nav>
+    <a class="cta" href="prototype/index.html" target="_blank" rel="noopener">Прототип</a>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</header>
+
+<main>
+  <section id="top">
+    <img src="img/00_cover.webp" width="1440" height="825" alt="Обложка: Как показать, куда ушли деньги с кредитки. Роль, состав работ, срок 5 дней, концепт.">
+    <div class="endbar" aria-hidden="true" style="left:5.1%;top:62.2%;width:43.4%;height:11.4%"></div>
+    <div class="endbtns cover" style="top:67.8%">
+      <a class="cb cb-fill" href="#reshenie">Смотреть решение</a>
+      <a class="cb cb-line" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a>
+    </div>
+    <div class="mcov">
+      <p class="mc-eye">Кейс: СберБанк Онлайн <span>· кредитная карта · мобильное приложение</span></p>
+      <p class="mc-h">Как показать, куда ушли деньги с кредитки</p>
+      <p class="mc-lede">Путь от <b>8 000 ₽, списанных без объяснений</b>, к <b>ответу прямо на экране карты</b></p>
+      <div class="mc-btns"><a class="cb cb-fill" href="#reshenie">Смотреть решение</a><a class="cb cb-line" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a></div>
+      <img class="mc-vis" src="img/cover_devices.webp" alt="" loading="lazy">
+      <dl class="mc-meta"><div><dt>Роль</dt><dd>UI/UX-дизайнер, инициативный кейс</dd></div><div><dt>Что сделала</dt><dd>Исследование, аудит, UX, UI, прототип</dd></div><div><dt>Срок</dt><dd>5 дней</dd></div><div><dt>Статус</dt><dd>Концепт, не связан со Сбером</dd></div></dl>
+    </div>
+  </section>
+  <section id="korotko">
+    <img src="img/01_korotko.webp" width="1440" height="1256" alt="Коротко: платёж ушёл на проценты, а приложение не объяснило почему. Было и стало.">
+    <div class="kfix" style="left:6.944%;top:65.13%;width:44.2%;height:23.25%">
+      <ul>
+        <li><span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#24B23E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Видно, куда ушёл каждый платёж</span></li>
+        <li><span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#24B23E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Понятно, сколько и до какого числа внести</span></li>
+        <li><span class="ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#24B23E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Предупреждение приходит до ошибки,<br>а не после</span></li>
+      </ul>
+    </div>
+  </section>
+  <section id="mehanika">
+    <img src="img/02a_mehanika_top.webp" width="1440" height="1118" loading="lazy" alt="Механика: как устроен беспроцентный период — у каждого месяца покупок свой срок. Четыре правила, которые интерфейс не объясняет.">
+    <div class="rules">
+      <div class="rule open">
+        <button class="rule-head" type="button" id="rh01" aria-expanded="true" aria-controls="rp01"><span class="rule-num">01</span><span class="rule-title">Не успел к сроку — проценты за все дни</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        <div class="rule-panel" id="rp01" role="region" aria-labelledby="rh01"><div class="rule-inner"><div class="rule-body">
+          <p class="rule-text">Льготный период отменяется, проценты начисляются с даты каждой покупки месяца, а не с дня просрочки.</p>
+          <p class="rule-ex"><b>Пример:</b>43 000 ₽ покупок июля × ≈ 108 дней ≈ 6 000 ₽</p>
+          <p class="rule-now"><b>В приложении сейчас:</b> не видно, какой срок уже прошёл и за какой месяц начислены проценты</p>
+        </div></div></div>
+      </div>
+      <div class="rule">
+        <button class="rule-head" type="button" id="rh02" aria-expanded="false" aria-controls="rp02"><span class="rule-num">02</span><span class="rule-title">Платёж сначала гасит проценты</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        <div class="rule-panel" id="rp02" role="region" aria-labelledby="rh02"><div class="rule-inner"><div class="rule-body">
+          <p class="rule-text">Деньги сначала уходят на начисленные проценты, и только остаток уменьшает долг. Поэтому лимит вырастает меньше, чем внесено.</p>
+          <p class="rule-ex"><b>Пример:</b>Внесено 10 000 ₽: 7 950 ₽ — на проценты за июнь, 2 050 ₽ — в основной долг. Доступно: 50 250 → 52 300 ₽</p>
+          <p class="rule-now"><b>В приложении сейчас:</b> «Перевод выполнен» — и всё. Разбивку платежа видно только в выписке, а сумму процентов назвала только поддержка</p>
+        </div></div></div>
+      </div>
+      <div class="rule">
+        <button class="rule-head" type="button" id="rh03" aria-expanded="false" aria-controls="rp03"><span class="rule-num">03</span><span class="rule-title">Обязательный платёж ≠ без процентов</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        <div class="rule-panel" id="rp03" role="region" aria-labelledby="rh03"><div class="rule-inner"><div class="rule-body">
+          <p class="rule-text">Обязательный платёж защищает только от просрочки. Чтобы проценты не начислялись, нужно до конца беспроцентного периода внести всю его сумму.</p>
+          <p class="rule-ex"><b>Пример:</b>Обязательный платёж — 4 300 ₽ до 25 октября. Чтобы не платить проценты — 65 200 ₽ до 31 октября</p>
+          <p class="rule-now"><b>В приложении сейчас:</b> «Вы погасили обязательный платёж» с зелёной иконкой читается как «всё в порядке», хотя проценты продолжают начисляться</p>
+        </div></div></div>
+      </div>
+      <div class="rule">
+        <button class="rule-head" type="button" id="rh04" aria-expanded="false" aria-controls="rp04"><span class="rule-num">04</span><span class="rule-title">СБП, переводы и наличные — без льготного периода</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        <div class="rule-panel" id="rp04" role="region" aria-labelledby="rh04"><div class="rule-inner"><div class="rule-body">
+          <p class="rule-text">Оплата по QR и СБП с кредитки, переводы и снятие наличных не входят в беспроцентный период: проценты идут с первого дня.</p>
+          <p class="rule-ex"><b>Пример:</b>4 450 ₽ в кофейне по СБП → ≈ 6 ₽ процентов в день с даты оплаты, пока сумма не погашена</p>
+          <p class="rule-now"><b>В приложении сейчас:</b> «Операция выполнена» — ни слова о льготном периоде. О процентах человек узнаёт уже после оплаты</p>
+        </div></div></div>
+      </div>
+    </div>
+    <img src="img/02b_mehanika_note.webp" width="1440" height="135" loading="lazy" alt="Упрощённо, по условиям карты. Суммы в примерах — из сценария макетов, условные.">
+  </section>
+  <section id="issledovanie">
+    <img src="img/03_issledovanie.webp" width="1440" height="4788" loading="lazy" alt="Исследование: путь из семи шагов, пять инсайтов, отзывы клиентов и вывод.">
+    <a class="src" href="https://brobank.ru/credit-card-sberbank-sberkarta/comments/" target="_blank" rel="noopener" aria-label="Отзыв на Бробанке" style="left:22.19%;top:81.38%;width:6.6%;height:0.5%"></a>
+    <a class="src" href="https://t-j.ru/sber-credit-card-pros-cons/" target="_blank" rel="noopener" aria-label="Отзыв в Т—Ж" style="left:47.43%;top:83.56%;width:4.27%;height:0.5%"></a>
+    <a class="src" href="https://ru.myfin.by/bank/sberbank/otzyvy/credit-cards" target="_blank" rel="noopener" aria-label="Отзыв на Myfin" style="left:78.06%;top:82.85%;width:4.76%;height:0.5%"></a>
+  </section>
+  <section id="principy"><img src="img/04_principy.webp" width="1440" height="2034" loading="lazy" alt="Пять принципов решения, компромисс и рамка."></section>
+  <section id="reshenie">
+    <img src="img/05_reshenie_v2.webp" width="1440" height="6670" loading="lazy" alt="Решение: карта экранов и четыре момента — узнать заранее, заплатить правильно, понять, что произошло, не попасть снова.">
+  </section>
+  <section id="sostoyaniya"><img src="img/06_sostoyaniya_v3.webp" width="1440" height="3165" loading="lazy" alt="Состояния: шесть состояний слота и экраны для нестандартных ситуаций."></section>
+  <section id="iteracii"><img src="img/07_iteracii.webp" width="1440" height="3058" loading="lazy" alt="Итерации: три ключевые ошибки и сквозная проверка сумм."></section>
+  <section id="yazyk"><img src="img/08_yazyk.webp" width="1440" height="1562" loading="lazy" alt="Визуальный язык: цвета и новые компоненты из существующих элементов."></section>
+  <section id="dalshe">
+    <img src="img/09_dalshe.webp" width="1440" height="2457" loading="lazy" alt="Что дальше: как проверить решение, цена для банка, что нужно для внедрения, ограничения и следующий шаг.">
+    <div class="endbar" aria-hidden="true" style="left:7.64%;top:92.06%;width:61.8%;height:4.07%"></div>
+    <div class="endbtns" style="top:93.12%">
+      <a class="eb eb-primary" href="prototype/index.html" target="_blank" rel="noopener">Открыть прототип</a>
+      <a class="eb eb-sec" href="../mes/index.html">Смотреть следующий кейс</a>
+    </div>
+  </section>
+</main>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  // Paste real links here when they exist; empty means the button shows a note instead.
+  var LINKS = { prototype: 'prototype/index.html', next: '' };
+  var NOTES = { prototype: 'Здесь откроется прототип приложения — ссылка ещё не добавлена', next: 'Здесь откроется следующий кейс — ссылка ещё не добавлена' };
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var bar = document.querySelector('.progress');
+  var navLinks = document.querySelector('.nav-links');
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var current = -1;
+
+  function setActive(i) {
+    if (i === current) { placeBar(); return; }
+    current = i;
+    links.forEach(function (a, k) { a.classList.toggle('active', k === i); if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    if (i >= 0) {
+      var a = links[i];
+      var l = a.offsetLeft, r = l + a.offsetWidth;
+      if (l < navLinks.scrollLeft || r > navLinks.scrollLeft + navLinks.clientWidth) {
+        navLinks.scrollTo({ left: l - 24, behavior: 'smooth' });
+      }
+    }
+    placeBar();
+  }
+  function placeBar() {
+    if (current < 0) { bar.style.width = '0px'; return; }
+    var rect = links[current].getBoundingClientRect();
+    bar.style.width = Math.max(0, rect.right) + 'px';
+  }
+  function onScroll() {
+    var probe = window.innerHeight * 0.35;
+    var idx = -1;
+    sections.forEach(function (s, k) { if (s && s.getBoundingClientRect().top <= probe) idx = k; });
+    setActive(idx);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  navLinks.addEventListener('scroll', placeBar, { passive: true });
+  document.querySelectorAll('img').forEach(function (img) { img.addEventListener('load', onScroll); });
+  onScroll();
+
+  var rules = Array.prototype.slice.call(document.querySelectorAll('.rule'));
+  rules.forEach(function (r) {
+    r.querySelector('.rule-head').addEventListener('click', function () {
+      var willOpen = !r.classList.contains('open');
+      rules.forEach(function (o) { o.classList.remove('open'); o.querySelector('.rule-head').setAttribute('aria-expanded', 'false'); });
+      if (willOpen) { r.classList.add('open'); r.querySelector('.rule-head').setAttribute('aria-expanded', 'true'); }
+      setTimeout(onScroll, 400);
+    });
+  });
+
+  var toast = document.querySelector('.toast'), timer;
+  document.querySelectorAll('[data-link]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var key = el.getAttribute('data-link');
+      if (LINKS[key]) { var a = document.createElement('a'); a.href = LINKS[key]; a.target = '_blank'; a.rel = 'noopener'; a.click(); return; }
+      toast.textContent = NOTES[key];
+      toast.classList.add('show');
+      clearTimeout(timer); timer = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+    });
+  });
+})();
+</script>
+
+
+<style>
+/* Phone: the case blocks are pictures, so each opens full size to read */
+.zv { display: none; }
+@media (max-width: 700px) {
+  main section > img { cursor: zoom-in; }
+  .zhint { position: fixed; z-index: 15; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); padding: 10px 16px; border-radius: 14px; background: rgba(20,20,20,.92); color: #fff; font: 400 14px "Onest", "Golos Text", Arial, sans-serif; white-space: nowrap; transition: opacity .3s; pointer-events: none; }
+  .zhint.off { opacity: 0; }
+  .zv[open] { display: block; position: fixed; inset: 0; z-index: 30; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0A0A0A; overflow: auto; -webkit-overflow-scrolling: touch; }
+  .zv::backdrop { background: #0A0A0A; }
+  .zv img { display: block; width: 260vw; max-width: none; height: auto; }
+  .zv-close { position: fixed; z-index: 31; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(12px + env(safe-area-inset-right, 0px)); width: 44px; height: 44px; border: 0; border-radius: 14px; background: rgba(30,30,30,.92); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; }
+  .zv-tip { position: fixed; z-index: 31; left: 12px; top: calc(12px + env(safe-area-inset-top, 0px)); padding: 10px 14px; border-radius: 14px; background: rgba(30,30,30,.92); color: #fff; font: 400 14px "Onest", "Golos Text", Arial, sans-serif; pointer-events: none; }
+}
+</style>
+<dialog class="zv" id="zv" aria-label="Блок кейса крупно"><button class="zv-close" type="button" id="zvClose" aria-label="Закрыть">×</button><p class="zv-tip">Листайте в&nbsp;стороны и&nbsp;вниз</p><img id="zvImg" alt=""></dialog>
+<script>
+(function () {
+  var mq = window.matchMedia('(max-width: 700px)'), d = document.getElementById('zv'), zi = document.getElementById('zvImg');
+  if (!d.showModal) return;
+  var hint = document.createElement('p'); hint.className = 'zhint'; hint.textContent = 'Нажмите на блок, чтобы рассмотреть';
+  if (mq.matches) { document.body.appendChild(hint); setTimeout(function () { hint.classList.add('off'); }, 4500); }
+  document.querySelectorAll('main section > img').forEach(function (im) {
+    im.addEventListener('click', function () {
+      if (!mq.matches) return;
+      zi.src = im.currentSrc || im.src; zi.alt = im.alt; d.showModal(); d.scrollTo(0, 0);
+    });
+  });
+  document.getElementById('zvClose').addEventListener('click', function () { d.close(); });
+})();
+</script>
+</body></html>

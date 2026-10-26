@@ -1,0 +1,242 @@
+<!doctype html><html lang="ru"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Прототип: кредитка СберБанк Онлайн</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: scenario list on the left, phone with the live screen in the centre; stacks on phones (single dark look, as in the case) */
+:root {
+  --bg: #060606;
+  --panel: #111111;
+  --line: #222222;
+  --fg: #FFFFFF;
+  --muted: #8F8F8F;
+  --green: #24B23E;
+  --button: #168E2C;
+  --font: "Golos Text", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); }
+.wrap {
+  --w: min(390px, calc((100dvh - 132px) * 390 / 844), calc(100vw - 32px));
+  min-height: 100%; box-sizing: border-box; max-width: 1200px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; align-items: flex-start; align-content: center; justify-content: center; gap: 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px;
+}
+.side { flex: 0 0 340px; width: 340px; min-width: 0; height: calc(var(--w) * 844 / 390); box-sizing: border-box; display: flex; flex-direction: column; gap: 22px; }
+.side .scen { margin-top: auto; }
+.tip { margin-bottom: -.7em !important; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+h1 { margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.lead { margin: 0; color: #BDBDBD; font-size: 15px; line-height: 1.5; }
+.scen { display: flex; flex-direction: column; gap: 6px; }
+.scen-label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.scen button {
+  text-align: left; border: 1px solid var(--line); background: var(--panel); color: #DADADA;
+  border-radius: 12px; padding: 11px 14px; font: 400 15px var(--font); cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+}
+.scen button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3A3A3A; flex: 0 0 auto; }
+.scen button:hover { border-color: #333; color: var(--fg); }
+.scen button[aria-pressed="true"] { color: var(--fg); border-color: #1d5a2a; background: #0E1A11; }
+.scen button[aria-pressed="true"]::before { background: var(--green); }
+.scen button:focus-visible, .hot:focus-visible, .ctl:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.tip { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.stage {
+  flex: 0 0 auto; width: var(--w); display: flex; flex-direction: column; gap: 14px;
+}
+.phone {
+  width: var(--w); aspect-ratio: 390 / 844; max-width: 100%;
+  border-radius: calc(var(--w) * .14); border: 2px solid #2A2A2A; background: #121212; overflow: hidden; position: relative;
+  box-shadow: 0 0 80px rgba(36,178,62,.18), 0 30px 80px rgba(0,0,0,.6);
+}
+.screen { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.screen::-webkit-scrollbar { display: none; }
+.canvas { position: relative; width: 100%; }
+.canvas img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.hot { position: absolute; border: 0; padding: 0; margin: 0; background: transparent; cursor: pointer; border-radius: 10px; }
+.flash .hot { background: rgba(36,178,62,.22); box-shadow: inset 0 0 0 1.5px rgba(36,178,62,.8); transition: background .15s; }
+.hot:active { background: rgba(255,255,255,.08); }
+.bar { display: grid; grid-template-columns: 92px minmax(0, 1fr) 92px; align-items: center; gap: 8px; width: 100%; }
+.ctl { width: 100%; height: 36px; border: 1px solid var(--line); background: var(--panel); color: #DADADA; border-radius: 10px; padding: 7px 12px; font: 400 13px var(--font); cursor: pointer; }
+.ctl:disabled { opacity: .4; cursor: default; }
+.now { color: #DADADA; font-size: 13px; line-height: 1.35; text-align: center; height: 2.7em; display: flex; align-items: center; justify-content: center; overflow: hidden; text-wrap: balance; }
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px);
+  max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 14px; background: #1E1E1E; border: 1px solid #333;
+  color: var(--fg); font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 860px) {
+  .wrap { flex-direction: column; gap: 24px; align-items: stretch; }
+  .side { flex-basis: auto; width: auto; height: auto; }
+  .side .scen { margin-top: 0; }
+  .stage { order: -1; align-self: center; }
+  .scen { flex-direction: row; flex-wrap: wrap; }
+  .scen-label { width: 100%; }
+  .wrap { --w: min(390px, calc(100vw - 32px)); }
+}
+@media (prefers-reduced-motion: reduce) { .toast, .flash .hot { transition: none; } }
+</style>
+
+<div class="wrap">
+  <aside class="side">
+    <div class="eyebrow">Прототип · концепт</div>
+    <h1>Кредитка в СберБанк Онлайн</h1>
+    <p class="lead">Путь от «куда ушли деньги» до платежа, который останавливает проценты. Суммы условные, из сценария макетов.</p>
+    <div class="scen" role="group" aria-label="Сценарии">
+      <div class="scen-label">Начать со сценария</div>
+      <button type="button" data-start="card" aria-pressed="true">Основной путь: идут проценты</button>
+      <button type="button" data-start="oper" aria-pressed="false">Куда ушёл платёж</button>
+      <button type="button" data-start="card_soon" aria-pressed="false">Срок близко</button>
+      <button type="button" data-start="top_own" aria-pressed="false">Внести меньше нужного</button>
+      <button type="button" data-start="top_all" aria-pressed="false">Не хватает денег</button>
+      <button type="button" data-start="top_mand" aria-pressed="false">Обязательный платёж выставлен</button>
+      <button type="button" data-start="cantpay" aria-pressed="false">Не получается заплатить</button>
+    </div>
+    <p class="tip">Нажмите на пустое место экрана — подсветятся все активные зоны. Длинные экраны прокручиваются.</p>
+  </aside>
+
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="screen" id="screen"><div class="canvas" id="canvas"></div></div>
+    </div>
+    <div class="bar">
+      <button class="ctl" type="button" id="back">← Назад</button>
+      <span class="now" id="now" aria-live="polite"></span>
+      <button class="ctl" type="button" id="restart">Сначала</button>
+    </div>
+  </div>
+</div>
+<div class="toast" role="status" aria-live="polite" id="toast"></div>
+
+<script>
+(function () {
+  // Hotspots in 390-wide screen points: [x, y, w, h, target, label]. target: screen id, 'back', or '!message'.
+  var NOT_IN = '!Этот экран не вошёл в прототип';
+  var TOP_CHIPS = [
+    [32, 330, 322, 35, 'top_65200', '65 200 ₽ — остановит проценты'],
+    [32, 375, 251, 34, 'top_84200', '84 200 ₽ — и август без процентов'],
+    [32, 419, 89, 33, 'top_all', 'Весь долг'],
+    [137, 419, 105, 33, 'top_own', 'Своя сумма']
+  ];
+  var BACK = [0, 0, 64, 60, 'back', 'Назад'];
+  var S = {
+    card: { name: 'Экран карты · идут проценты', h: 1084, hot: [
+      [266, 372, 92, 40, 'top_65200', 'Внести'],
+      [30, 486, 321, 44, 'periods', 'Подробнее о сроке'],
+      [198, 613, 174, 109, 'top_65200', 'Пополнить'],
+      [30, 855, 328, 45, 'oper', 'Пополнение карты']
+    ]},
+    card_soon: { name: 'Экран карты · срок близко', h: 1051, hot: [
+      [264, 370, 95, 42, '!Пополнение на 19 000 ₽ в прототип не вошло — посмотрите основной путь', 'Внести'],
+      [30, 461, 327, 43, 'periods', 'Подробнее о сроке'],
+      [198, 580, 175, 109, 'top_65200', 'Пополнить'],
+      [30, 819, 328, 45, 'oper', 'Пополнение карты']
+    ]},
+    top_65200: { name: 'Пополнение · 65 200 ₽', h: 844, hot: [BACK].concat(TOP_CHIPS, [[16, 775, 358, 49, 'paid', 'Внести 65 200 ₽']]) },
+    top_84200: { name: 'Пополнение · 84 200 ₽', h: 844, hot: [BACK].concat(TOP_CHIPS, [[16, 775, 358, 49, '!Экран «Платёж внесён» для 84 200 ₽ в прототип не вошёл', 'Внести 84 200 ₽']]) },
+    top_all: { name: 'Пополнение · не хватает денег', h: 844, hot: [BACK].concat(TOP_CHIPS, [[16, 775, 358, 49, '!Денег на счёте не хватает — кнопка неактивна', 'Внести 103 900 ₽']]) },
+    top_own: { name: 'Пополнение · своя сумма', h: 844, hot: [BACK].concat(TOP_CHIPS, [[16, 775, 358, 49, 'paid_less', 'Внести 10 000 ₽']]) },
+    top_mand: { name: 'Пополнение · обязательный платёж', h: 844, hot: [BACK,
+      [32, 375, 322, 34, 'top_65200', '65 200 ₽ — остановит проценты'],
+      [32, 419, 251, 33, 'top_84200', '84 200 ₽ — и август без процентов'],
+      [32, 462, 94, 33, 'top_all', 'Весь долг'],
+      [136, 462, 108, 33, 'top_own', 'Своя сумма'],
+      [16, 775, 358, 49, '!Экран после обязательного платежа в прототип не вошёл', 'Внести 4 300 ₽']
+    ]},
+    paid: { name: 'Платёж внесён · 65 200 ₽', h: 1004, hot: [
+      [0, 0, 64, 60, 'card_soon', 'Закрыть'],
+      [18, 860, 356, 40, 'periods', 'Беспроцентные периоды'],
+      [18, 937, 356, 48, 'card_soon', 'Готово']
+    ]},
+    paid_less: { name: 'Платёж внесён · меньше нужного', h: 972, hot: [
+      [0, 0, 64, 60, 'card', 'Закрыть'],
+      [16, 771, 358, 39, 'periods', 'Беспроцентные периоды'],
+      [16, 876, 358, 47, 'top_65200', 'Внести 55 200 ₽'],
+      [100, 931, 190, 28, 'card', 'Готово']
+    ]},
+    oper: { name: 'Операция · куда ушёл платёж', h: 1135, hot: [BACK,
+      [32, 811, 325, 49, 'top_65200', 'Внести 65 200 ₽'],
+      [16, 896, 357, 43, 'periods', 'Беспроцентные периоды'],
+      [16, 953, 357, 43, NOT_IN, 'Справка по операции'],
+      [16, 1010, 357, 43, 'statement', 'Выписка по карте'],
+      [16, 1068, 357, 43, NOT_IN, 'Не согласен с начислением']
+    ]},
+    periods: { name: 'Беспроцентные периоды', h: 928, hot: [BACK,
+      [32, 348, 283, 26, 'how', 'Как считаем'],
+      [32, 390, 327, 49, 'top_65200', 'Внести 65 200 ₽'],
+      [61, 532, 168, 23, 'oper', 'Почему списали 7 950 ₽']
+    ]},
+    how: { name: 'Как считаем', h: 914, hot: [
+      [0, 0, 390, 60, 'back', 'Закрыть'],
+      [16, 848, 358, 48, 'back', 'Понятно']
+    ]},
+    statement: { name: 'Выписка по карте', h: 844, hot: [BACK,
+      [16, 409, 357, 56, 'how', 'За что начислили 7 950 ₽'],
+      [16, 721, 358, 48, '!В концепте PDF не скачивается', 'Скачать PDF'],
+      [16, 779, 358, 48, '!В концепте выписка не отправляется', 'Отправить на почту']
+    ]},
+    cantpay: { name: 'Не получается заплатить', h: 844, hot: [BACK,
+      [16, 273, 357, 93, 'top_own', 'Внести сколько есть'],
+      [16, 378, 357, 93, '!Заявка на отсрочку в прототип не вошла', 'Попросить отсрочку'],
+      [16, 485, 357, 91, '!Чат с сотрудником в прототип не вошёл', 'Написать сотруднику банка']
+    ]}
+  };
+
+  var canvas = document.getElementById('canvas'), screen = document.getElementById('screen');
+  var nowEl = document.getElementById('now'), backBtn = document.getElementById('back');
+  var toast = document.getElementById('toast'), tTimer, fTimer;
+  var stack = [], start = 'card';
+
+  // Preload every screen so taps feel instant.
+  Object.keys(S).forEach(function (k) { var i = new Image(); i.src = 's/' + k + '.webp'; });
+
+  function render(id) {
+    var s = S[id];
+    canvas.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = 's/' + id + '.webp'; img.alt = s.name; img.width = 390; img.height = s.h;
+    canvas.appendChild(img);
+    s.hot.forEach(function (h) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'hot'; b.setAttribute('aria-label', h[5]);
+      b.style.left = (h[0] / 390 * 100) + '%'; b.style.top = (h[1] / s.h * 100) + '%';
+      b.style.width = (h[2] / 390 * 100) + '%'; b.style.height = (h[3] / s.h * 100) + '%';
+      b.addEventListener('click', function (e) { e.stopPropagation(); go(h[4]); });
+      canvas.appendChild(b);
+    });
+    screen.scrollTop = 0;
+    nowEl.textContent = s.name;
+    backBtn.disabled = stack.length < 2;
+  }
+  function go(t) {
+    if (t === 'back') { if (stack.length > 1) { stack.pop(); render(stack[stack.length - 1]); } return; }
+    if (t.charAt(0) === '!') { say(t.slice(1)); return; }
+    stack.push(t); render(t);
+  }
+  function begin(id) {
+    start = id; stack = [id]; render(id);
+    document.querySelectorAll('[data-start]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-start') === id ? 'true' : 'false'); });
+  }
+  function say(msg) {
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(tTimer); tTimer = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+  }
+  canvas.addEventListener('click', function () {
+    canvas.classList.add('flash'); clearTimeout(fTimer);
+    fTimer = setTimeout(function () { canvas.classList.remove('flash'); }, 700);
+  });
+  backBtn.addEventListener('click', function () { go('back'); });
+  document.getElementById('restart').addEventListener('click', function () { begin(start); });
+  document.querySelectorAll('[data-start]').forEach(function (b) {
+    b.addEventListener('click', function () { begin(b.getAttribute('data-start')); });
+  });
+  begin('card');
+})();
+</script>
+
+</body></html>
