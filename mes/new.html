@@ -123,8 +123,8 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .panel .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .panel .note { margin-top: auto; font-size: 17px; }
 .steps { display: grid; gap: 12px; }
-.steps li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; }
-.steps span { display: flex; align-items: center; height: 56px; border-radius: 14px; background: #fff; color: var(--ink); font-size: 19px; padding: 0 22px; }
+.steps li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: stretch; }
+.steps span { display: flex; align-items: center; min-height: 56px; border-radius: 14px; background: #fff; color: var(--ink); font-size: 19px; line-height: 1.25; padding: 12px 22px; }
 .steps span:first-child { justify-content: center; padding: 0; }
 .steps .gap span { background: transparent; border: 1.5px dashed var(--blue); color: var(--ink); }
 .panel-d .steps span { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); color: #fff; }
@@ -419,7 +419,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .acc li { font-size: 15px; padding-left: 32px; }
   .panel { gap: 18px; }
   .steps li { grid-template-columns: 46px 1fr; gap: 8px; }
-  .steps span { height: 48px; font-size: 16px; padding: 0 16px; border-radius: 12px; }
+  .steps span { min-height: 48px; font-size: 16px; padding: 10px 16px; border-radius: 12px; }
   .box { padding: 22px 20px; }
 
   .pf-head { display: none; }
