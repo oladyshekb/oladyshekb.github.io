@@ -144,6 +144,8 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .pf li { padding: 24px 0; border-bottom: 1px solid var(--line); }
 .pf li p { margin-top: 6px; }
 .arrow { display: block; width: 100%; height: 12px; color: var(--blue); }
+.pf-to, .pf-l { display: none; }
+
 .decide { margin-top: 24px; border-radius: var(--r-card); padding: 40px; }
 .decide .pair { margin-top: 24px; }
 .glass { border-radius: 18px; padding: 28px 30px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); display: grid; gap: 10px; }
@@ -381,10 +383,15 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .box { padding: 22px 20px; }
 
   .pf-head { display: none; }
-  .pf li { grid-template-columns: 1fr; gap: 10px; padding: 20px 0; }
-  .pf li .arrow { width: 34px; height: 12px; transform: rotate(90deg); justify-self: start; margin: 10px 0 10px -6px; }
-  .pf li > div:last-child { padding: 14px 16px; border-radius: 14px; background: var(--panel); }
-
+  .pf ul { display: grid; gap: 12px; }
+  .pf li { grid-template-columns: 1fr; gap: 0; padding: 0; border: 0; border-radius: 18px; background: var(--panel); overflow: hidden; }
+  .pf li > div:first-child { padding: 20px 18px 18px; }
+  .pf li .arrow { display: none; }
+  .pf-to { display: block; position: relative; z-index: 1; height: 0; }
+  .pf-to svg { position: absolute; left: 24px; top: -18px; width: 36px; height: 36px; padding: 9px; border-radius: 50%; background: var(--blue); color: #fff; box-shadow: 0 4px 10px rgba(0,119,176,.28); }
+  .pf-fn { padding: 30px 18px 20px; background: #fff; margin: 0 6px 6px; border-radius: 14px; }
+  .pf-l { display: block; margin-bottom: 6px; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--blue-ink); }
+  .pf-fn h4 { color: var(--ink); }
   .map-h { display: none; }
   .map li { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
   .map li .arrow { display: none; }
@@ -545,10 +552,10 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
     <div class="pf">
       <div class="pf-head" aria-hidden="true"><span>Проблема производства</span><span>Функция диспетчера</span></div>
       <ul>
-        <li><div><h4><span class="idx">[1]</span> Простои оборудования</h4><p>Простои приводят к потерям времени и снижению производительности</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><div><h4>Контроль</h4><p>Замечаем отклонения до того, как они станут проблемой</p></div></li>
-        <li><div><h4><span class="idx">[2]</span> Ручное управление</h4><p>Слишком много времени уходит на контроль и подготовку отчётов</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><div><h4>Планирование</h4><p>Понятный план до начала производства</p></div></li>
-        <li><div><h4><span class="idx">[3]</span> Отсутствие прозрачности</h4><p>Нет единой картины работы производства в реальном времени</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><div><h4>Производство</h4><p>Выполнение задач в реальном времени</p></div></li>
-        <li><div><h4><span class="idx">[4]</span> Потери эффективности</h4><p>Сложно выявлять причины потерь и точки роста</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><div><h4>Аналитика</h4><p>Данные для улучшения процессов</p></div></li>
+        <li><div><h4><span class="idx">[1]</span> Простои оборудования</h4><p>Простои приводят к потерям времени и снижению производительности</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="pf-to" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2.5v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="pf-fn"><p class="pf-l">Функция диспетчера</p><h4>Контроль</h4><p>Замечаем отклонения до того, как они станут проблемой</p></div></li>
+        <li><div><h4><span class="idx">[2]</span> Ручное управление</h4><p>Слишком много времени уходит на контроль и подготовку отчётов</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="pf-to" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2.5v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="pf-fn"><p class="pf-l">Функция диспетчера</p><h4>Планирование</h4><p>Понятный план до начала производства</p></div></li>
+        <li><div><h4><span class="idx">[3]</span> Отсутствие прозрачности</h4><p>Нет единой картины работы производства в реальном времени</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="pf-to" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2.5v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="pf-fn"><p class="pf-l">Функция диспетчера</p><h4>Производство</h4><p>Выполнение задач в реальном времени</p></div></li>
+        <li><div><h4><span class="idx">[4]</span> Потери эффективности</h4><p>Сложно выявлять причины потерь и точки роста</p></div><svg class="arrow" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h116M110 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="pf-to" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2.5v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="pf-fn"><p class="pf-l">Функция диспетчера</p><h4>Аналитика</h4><p>Данные для улучшения процессов</p></div></li>
       </ul>
     </div>
   </div>
