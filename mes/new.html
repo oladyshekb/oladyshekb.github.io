@@ -305,6 +305,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .tldr li:last-child { background: var(--dark); color: var(--on-dark-2); }
 .tldr li:last-child .tl-k { color: var(--blue); }
 .st-tabs { display: none; }
+.only-m { display: none !important; }
 .swipe-hint { display: none; }
 picture { display: block; }
 /* UI system */
@@ -480,6 +481,8 @@ picture { display: block; }
   .swipe-hint { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; color: var(--muted); }
   .dark .swipe-hint { color: #8D95A1; }
   .swipe-hint svg { width: 16px; height: 16px; }
+  .only-m { display: block !important; }
+  .menu a.only-m { display: inline-block !important; }
   .pf-head { display: none; }
   .pf ul { display: flex; gap: 10px; margin: 0 calc(var(--pad) * -1); padding: 0 var(--pad) 4px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--pad); scrollbar-width: none; align-items: stretch; }
   .pf ul::-webkit-scrollbar { display: none; }
@@ -530,7 +533,7 @@ picture { display: block; }
   <div class="nav-in">
     <a class="all" href="../index.html#cases">← Все кейсы</a>
     <nav class="menu" aria-label="Разделы кейса">
-      <a href="#short">Коротко</a>
+      <a class="only-m" href="#short">Коротко</a>
       <a href="#context">Контекст</a>
       <a href="#research">Исследование</a>
       <a href="#scenario">Сценарий</a>
@@ -562,7 +565,7 @@ picture { display: block; }
   </dl>
 </section>
 
-<section class="sec" id="short" aria-labelledby="h-short">
+<section class="sec only-m" id="short" aria-labelledby="h-short">
   <h2 id="h-short" class="h-short">Коротко</h2>
   <ol class="tldr">
     <li><span class="tl-k">Задача</span><p>Объяснить сложный B2B-продукт тем, кто его ещё не&nbsp;видел, и&nbsp;привести к&nbsp;заявке на&nbsp;консультацию. Был только интерфейс программы.</p></li>
