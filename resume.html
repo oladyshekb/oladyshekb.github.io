@@ -85,6 +85,16 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (max-width: 600px) { body { font-size: 15px; } .wrap { padding-block: 20px 40px; gap: 12px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
+<!-- Yandex.Metrika counter -->
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(113940845, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113940845" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
 <header class="top"><div class="top-in"><a href="index.html">← На главную</a><span class="who">Лада Белык · UI/UX-дизайнер</span><a class="dl" id="dl" href="resume.pdf" download="Лада_Белык_UI-UX.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>скачать резюме</a></div></header>
@@ -231,6 +241,15 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   document.getElementById('dipClose').addEventListener('click', function () { d.close(); });
   d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
 })();
+</script>
+<!-- Cookie notice -->
+<div id="ck" role="region" aria-label="Уведомление о cookie" hidden style="position:fixed;z-index:2147483000;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 24px));display:flex;align-items:center;gap:14px;padding:12px 12px 12px 18px;border-radius:16px;background:rgba(24,24,22,.96);border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px rgba(0,0,0,.35);color:#E8E8E4;font:400 14px/1.4 Onest,'Helvetica Neue',Arial,sans-serif;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)">
+  <span style="flex:1 1 auto">Сайт использует cookie и&nbsp;Яндекс Метрику, чтобы считать посещения.</span>
+  <button type="button" id="ckOk" style="flex:0 0 auto;min-height:40px;padding:0 18px;border:0;border-radius:11px;background:#fff;color:#121212;font:500 14px Onest,'Helvetica Neue',Arial,sans-serif;cursor:pointer">Понятно</button>
+</div>
+<script>
+(function(){var k='ck-ok',b=document.getElementById('ck');try{if(localStorage.getItem(k))return;}catch(e){}
+b.hidden=false;document.getElementById('ckOk').addEventListener('click',function(){b.hidden=true;try{localStorage.setItem(k,'1');}catch(e){}});})();
 </script>
 </body>
 </html>
