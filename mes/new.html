@@ -27,7 +27,7 @@
   --line: #DCE1EA;
   --blue: #00ACF9;
   --blue-press: #0098DC;
-  --blue-ink: #0077B0;
+  --blue-ink: #00ACF9;
   --dark: #18191C;
   --dark-2: #222327;
   --dark-line: rgba(255,255,255,.12);
@@ -60,7 +60,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(255,255,255,.94); backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); }
 .nav-in { height: var(--nav-h); max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 0 max(24px, env(safe-area-inset-right, 0px)) 0 max(24px, env(safe-area-inset-left, 0px)); }
 .all { justify-self: start; color: var(--blue-ink); text-decoration: none; font-size: 16px; }
-.all:hover { color: var(--blue-press); }
+.all:hover { color: var(--blue); opacity: .8; }
 .menu { display: flex; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .menu::-webkit-scrollbar { display: none; }
 .menu a { flex: 0 0 auto; padding: 8px 10px; color: var(--text); text-decoration: none; font-size: 16px; white-space: nowrap; border-radius: 8px; transition: color .2s; }
@@ -187,16 +187,20 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .wf.form i:last-child { grid-column: 1 / -1; }
 
 .ways { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.way { border-radius: var(--r-card); padding: 36px 40px; display: grid; gap: 14px; align-content: start; }
+.way { container-type: inline-size; border-radius: var(--r-card); padding: 36px 32px; display: grid; gap: 14px; align-content: start; }
 .way.d { background-color: #151618; background-image: linear-gradient(150deg, #151618 0%, #151618 40%, #0F3247 100%); color: var(--on-dark-2); }
 .way.d h3 { color: #fff; }
 .way.l { background: var(--panel); border: 1px solid var(--ink); }
 .way .head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
-.flow { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; }
-.flow span { height: 46px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 14px; border: 1px solid var(--ink); background: #fff; color: var(--ink); font-size: 16px; }
+.flow { margin-top: 18px; display: flex; flex-wrap: nowrap; align-items: center; }
+.flow span { flex: 0 0 auto; height: 44px; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 13px; border: 1px solid var(--ink); background: #fff; color: var(--ink); font-size: 15px; white-space: nowrap; }
 .way.d .flow span { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.3); color: #fff; }
 .flow span.go { background: var(--blue); border-color: var(--blue); color: #fff; }
-.flow s { width: 16px; height: 1px; background: var(--blue); text-decoration: none; }
+.flow s { flex: 1 0 6px; max-width: 24px; height: 1px; background: var(--blue); text-decoration: none; }
+@container (max-width: 370px) {
+  .flow { flex-direction: column; align-items: flex-start; }
+  .flow s { flex: 0 0 14px; width: 1px; max-width: none; height: 14px; margin-left: 22px; }
+}
 
 /* Solution */
 .shot { margin-top: 36px; }
@@ -218,8 +222,6 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .st figcaption span { flex: 0 0 auto; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); font-size: 19px; font-weight: 400; }
 .st.err figcaption span { background: rgba(229,72,77,.18); border-color: rgba(229,72,77,.5); color: #FF8A8E; }
 .st.ok figcaption span { background: var(--blue); border-color: var(--blue); color: #fff; }
-.st img { border-radius: 16px; }
-.st p { margin-top: 10px; font-size: 16px; }
 .mob { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
 .mcard { border-radius: var(--r-card); padding: 28px; background: linear-gradient(170deg, #202125, #1A1B1E); border: 1px solid var(--dark-line); display: grid; gap: 12px; }
 .mcard .ph { display: grid; place-items: center; padding: 8px 0 12px; }
@@ -230,40 +232,66 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .mob-acts { margin-top: 28px; }
 
 
-/* Mini form for the states block */
-.mf { background: #fff; border-radius: 16px; padding: 18px; color: var(--ink); font-size: 13px; display: grid; gap: 12px; }
+/* Mini form for the states block — mirrors the landing's real form */
+.om { display: none; }
+.mfw { flex: 1 1 auto; display: flex; flex-direction: column; }
+.mf { flex: 1 1 auto; background: #fff; border-radius: 16px; padding: 18px; color: var(--ink); font-size: 13px; display: grid; gap: 12px; align-content: start; }
+.mf-t, .mf-call { display: none; }
 .mf-f { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: end; }
-.mf label { display: grid; gap: 6px; font-weight: 500; font-size: 12px; color: var(--ink); min-width: 0; }
-.mf .opt { font-weight: 400; color: var(--muted); }
+.mf-i { display: grid; gap: 6px; min-width: 0; }
+.mf-lb { font-weight: 500; font-size: 12px; color: var(--ink); }
+.mf .opt { font-weight: 400; color: var(--muted); margin-left: 4px; }
 .mf .fld { height: 40px; font-size: 13px; padding: 0 10px; border-radius: 8px; min-width: 0; overflow: hidden; }
-.mf .fld.err { flex-wrap: wrap; height: auto; min-height: 40px; padding: 6px 10px; align-content: center; gap: 0 8px; }
-.mf .fld.err small { font-size: 11px; }
+.mf .fld.err { background: #fff; gap: 8px; border: 1px solid var(--error); overflow: visible; position: relative; }
+.mf .fld.err small { position: absolute; left: 2px; top: calc(100% + 4px); }
+.mf-f:has(.err) { margin-bottom: 14px; }
+.mf .fld.err small { font-size: 11px; white-space: nowrap; color: #C6282E; }
 .fp { color: #6F7585; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fv { color: var(--ink); white-space: nowrap; }
-.mf-c { font-size: 12px; flex-wrap: nowrap; align-items: flex-start; gap: 8px; }
-.mf .mf-c > span { display: block; flex: 1 1 0; min-width: 0; color: var(--muted); }
-.mf label > span:first-child:not(.fld) { display: block; }
-.mf-c i { flex: 0 0 auto; width: 18px; height: 18px; border-radius: 5px; }
-.mf-c em { display: none; }
-.st.err .mf-c { flex-wrap: wrap; }
-.st.err .mf-c em { display: block; flex-basis: 100%; margin-left: 28px; font-size: 12px; }
-.mf .mf-c { gap: 6px 10px; }
+.mf-c { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--muted); }
+.mf-c > span { flex: 1 1 0; min-width: 0; }
+.mf-c i { flex: 0 0 auto; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--blue); background: var(--page); display: grid; place-items: center; }
+.mf-c i.e { border-color: var(--error); background: var(--error-bg); }
+.mf-c i.y { background: var(--ink); border-color: var(--ink); color: #fff; }
+.mf-c i svg { width: 12px; height: 12px; }
+.mf-e { margin: -6px 0 0 28px; font-size: 12px; color: #C6282E; }
 .mf-b { display: grid; gap: 8px; }
 .mf-b .btn { min-height: 42px; font-size: 13px; padding: 0 12px; white-space: normal; text-align: center; line-height: 1.2; }
-.mf-sent { align-content: center; justify-items: center; text-align: center; gap: 8px; padding: 28px 24px; background: radial-gradient(120% 120% at 50% 0%, #fff 55%, #EAF6FD); }
-.ok-ic { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; }
-.ok-ic svg { width: 20px; height: 20px; }
-.ok-t { font-size: 18px; font-weight: 500; }
-.ok-s { color: var(--text); max-width: 32ch; font-size: 14px; }
-.sgrid { align-items: stretch; }
+.sent { flex: 1 1 auto; position: relative; overflow: hidden; border-radius: 16px; display: grid; place-items: center; padding: 24px; min-height: 220px; background: #2A2C31; isolation: isolate; }
+.sent::before { content: ""; position: absolute; inset: 10%; z-index: -1; border-radius: 24px; background:
+  linear-gradient(#E9EDF4 0 0) 8% 14% / 40% 12% no-repeat, linear-gradient(#E9EDF4 0 0) 92% 14% / 40% 12% no-repeat,
+  linear-gradient(#E9EDF4 0 0) 8% 42% / 84% 12% no-repeat, linear-gradient(var(--blue) 0 0) 8% 80% / 84% 14% no-repeat, #fff; filter: blur(9px); opacity: .55; }
+.sent-card { position: relative; width: min(100%, 330px); background: #fff; border-radius: 20px; padding: 26px 22px 24px; display: grid; justify-items: center; gap: 8px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+.sent-x { position: absolute; top: 10px; right: 14px; font-size: 22px; line-height: 1; color: #7B808B; }
+.ok-ic { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; }
+.ok-ic svg { width: 22px; height: 22px; }
+.ok-t { font-size: 19px; font-weight: 500; color: var(--ink); }
+.ok-s { color: var(--text); max-width: 30ch; font-size: 14px; }
 .st { display: flex; flex-direction: column; }
-.st .mf { flex: 1 1 auto; }
+.st-d { margin-top: 10px; font-size: 16px; }
 @media (max-width: 760px) {
-  .mf-f { grid-template-columns: 1fr; }
-  .mf .fld { height: 44px; font-size: 15px; }
-  .mf { font-size: 14px; padding: 16px; }
-  .mf label { font-size: 13px; }
-  .mf-b .btn { min-height: 46px; font-size: 14px; }
+  .od, .od-f { display: none !important; }
+  .om { display: inline; }
+  .mf { border-radius: 22px; padding: 22px 20px; gap: 0; font-size: 14px; }
+  .mf-t { display: block; font-size: 20px; font-weight: 500; color: var(--ink); margin-bottom: 14px; }
+  .mf-f { grid-template-columns: 1fr; gap: 12px; }
+  .mf-lb { font-size: 14px; }
+  .mf .opt { margin-left: 8px; }
+  .mf .fld { height: 52px; font-size: 16px; padding: 0 16px; border-radius: 14px; border: 1px solid transparent; }
+  .mf .fld.err { border-color: var(--error); }
+  .mf .fld.err small { font-size: 14px; position: static; margin-left: auto; }
+  .mf-f:has(.err) { margin-bottom: 0; }
+  .mf .fld.err { overflow: hidden; }
+  .mf-c { margin-top: 18px; font-size: 14px; gap: 12px; color: #4F535A; }
+  .mf-c i { width: 22px; height: 22px; border-radius: 7px; border-width: 1px; }
+  .mf-c i svg { width: 13px; height: 13px; }
+  .mf-e { margin: 8px 0 0 34px; font-size: 14px; }
+  .mf-b { margin-top: 18px; }
+  .mf-b .btn { min-height: 52px; font-size: 16px; border-radius: 16px; }
+  .mf-call { display: block; margin-top: 16px; text-align: center; font-size: 15px; line-height: 1.4; color: #fff; }
+  .mf-call b { color: #fff; }
+  .sent { min-height: 300px; border-radius: 22px; padding: 20px 12px; }
+  .sent-card { border-radius: 22px; padding: 30px 22px 26px; }
 }
 
 /* UI system */
@@ -271,8 +299,8 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .found .box { padding: 28px; }
 .cap-s { font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .sw { display: grid; gap: 12px; margin-top: 6px; }
-.sw li { display: grid; grid-template-columns: 40px auto 1fr; align-items: center; gap: 12px; font-size: 15px; }
-.sw i { width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0,0,0,.08); }
+.sw li { display: grid; grid-template-columns: 36px 76px minmax(0, 1fr); align-items: center; gap: 12px; font-size: 15px; line-height: 1.3; min-height: 36px; }
+.sw i { width: 36px; height: 36px; border-radius: 10px; border: 1px solid rgba(0,0,0,.08); }
 .sw code { font: 500 16px var(--font); color: var(--ink); font-variant-numeric: tabular-nums; }
 .face { font-size: 44px; line-height: 1; font-weight: 700; color: var(--ink); letter-spacing: -.02em; }
 .vt { width: 100%; border-collapse: collapse; font-size: 16px; font-variant-numeric: tabular-nums; }
@@ -313,13 +341,17 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 
 .result { margin-top: 56px; border-radius: var(--r-card); padding: 48px; }
 .result h3 { color: #fff; }
-.result .lead { font-size: 18px; color: var(--on-dark-2); }
-.result .pair { margin-top: 32px; }
-.result ol { display: grid; }
-.result ol li { padding: 18px 0; border-top: 1px solid var(--dark-line); display: grid; gap: 6px; }
-.result ol li:first-child { border-top: 0; padding-top: 4px; }
-.result .glass { gap: 16px; }
-
+.r-lead { margin-top: 14px; max-width: 64ch; color: var(--on-dark-2); }
+.r-grid { margin-top: 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.acc { border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); min-width: 0; }
+.acc summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 26px 4px; color: var(--blue); font-weight: 500; font-size: 17px; cursor: default; pointer-events: none; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary svg { display: none; width: 18px; height: 18px; flex: 0 0 auto; color: #fff; transition: transform .2s; }
+.acc ol { padding: 6px 26px 12px; counter-reset: r; }
+.acc li { counter-increment: r; position: relative; padding: 14px 0 14px 34px; border-top: 1px solid var(--dark-line); color: var(--on-dark-2); }
+.acc li:first-child { border-top: 0; }
+.acc li::before { content: counter(r); position: absolute; left: 0; top: 15px; width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); font-size: 12px; display: grid; place-items: center; color: #fff; }
+.acc li b { color: #fff; }
 .next { padding: 40px 56px; display: flex; flex-wrap: wrap; gap: 14px; }
 
 /* Prototype dialog */
@@ -376,7 +408,15 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .seg { overflow-x: auto; scrollbar-width: none; }
   .seg::-webkit-scrollbar { display: none; }
   .pair { gap: 14px; }
-  .panel, .decide, .way, .result { padding: 22px 18px; }
+  .panel, .decide, .way { padding: 22px 18px; }
+  .result { padding: 24px 16px 16px; }
+  .r-lead { font-size: 15px; }
+  .r-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 20px; }
+  .acc summary { pointer-events: auto; cursor: pointer; padding: 16px 18px; font-size: 16px; min-height: 56px; }
+  .acc summary svg { display: block; }
+  .acc[open] summary svg { transform: rotate(180deg); }
+  .acc ol { padding: 0 18px 8px; }
+  .acc li { font-size: 15px; padding-left: 32px; }
   .panel { gap: 18px; }
   .steps li { grid-template-columns: 46px 1fr; gap: 8px; }
   .steps span { height: 48px; font-size: 16px; padding: 0 16px; border-radius: 12px; }
@@ -388,7 +428,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .pf li > div:first-child { padding: 20px 18px 18px; }
   .pf li .arrow { display: none; }
   .pf-to { display: block; position: relative; z-index: 1; height: 0; }
-  .pf-to svg { position: absolute; left: 24px; top: -18px; width: 36px; height: 36px; padding: 9px; border-radius: 50%; background: var(--blue); color: #fff; box-shadow: 0 4px 10px rgba(0,119,176,.28); }
+  .pf-to svg { position: absolute; left: 24px; top: -18px; width: 36px; height: 36px; padding: 9px; border-radius: 50%; background: var(--blue); color: #fff; box-shadow: 0 4px 10px rgba(0,172,249,.3); }
   .pf-fn { padding: 30px 18px 20px; background: #fff; margin: 0 6px 6px; border-radius: 14px; }
   .pf-l { display: block; margin-bottom: 6px; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--blue-ink); }
   .pf-fn h4 { color: var(--ink); }
@@ -401,8 +441,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .dots .lbl { display: inline; font-size: 13px; color: var(--muted); }
   .dot { width: 14px; height: 14px; }
 
-  .flow span { height: 40px; padding: 0 14px; font-size: 14px; }
-  .flow { row-gap: 8px; }
+  .flow span { height: 44px; padding: 0 16px; font-size: 15px; }
 
   .shot { margin-top: 24px; }
   .shots { gap: 28px; }
@@ -415,7 +454,6 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .objs figure { scroll-snap-align: start; }
   .st figcaption { font-size: 18px; }
   .st figcaption span { width: 40px; height: 40px; font-size: 16px; }
-  .st img { border-radius: 12px; }
   .mob { grid-template-columns: 1fr; gap: 14px; }
   .mcard { padding: 20px; }
   .mcard .ph img { width: 70%; }
@@ -687,13 +725,14 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
     <div class="states">
       <div>
         <h4>Проверка перед отправкой</h4>
-        <div class="sgrid"><figure class="st "><figcaption><span>01</span>Пустая форма</figcaption><div class="mf" aria-hidden="true"><div class="mf-f"><label>Имя<span class="fld"><span class="fp">Как к вам обращаться</span></span></label><label>Телефон<span class="fld"><span class="fp">+7 000 000-00-00</span></span></label><label><span>Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp">Название предприятия</span></span></label></div><p class="mf-c chk"><i></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p>Все поля с подсказками, кнопка активна сразу.</p></figure><figure class="st err"><figcaption><span>02</span>Неполный номер</figcaption><div class="mf" aria-hidden="true"><div class="mf-f"><label>Имя<span class="fld"><span class="fv">Лада</span></span></label><label>Телефон<span class="fld err"><span class="fv">+7 925 134</span><small>Введите номер полностью</small></span></label><label><span>Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp">Название предприятия</span></span></label></div><p class="mf-c chk"><i></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p>Поле подсвечено, и прямо в нём написано, что исправить.</p></figure><figure class="st err"><figcaption><span>03</span>Нет согласия</figcaption><div class="mf" aria-hidden="true"><div class="mf-f"><label>Имя<span class="fld"><span class="fv">Лада</span></span></label><label>Телефон<span class="fld"><span class="fv">+7 925 134-80-41</span></span></label><label><span>Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp">Название предприятия</span></span></label></div><p class="mf-c chk"><i class="e"></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span><em>Подтвердите согласие</em></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p>Чекбокс подсвечен, под ним — подсказка.</p></figure><figure class="st "><figcaption><span>04</span>Готово к отправке</figcaption><div class="mf" aria-hidden="true"><div class="mf-f"><label>Имя<span class="fld"><span class="fv">Лада</span></span></label><label>Телефон<span class="fld"><span class="fv">+7 925 134-80-41</span></span></label><label><span>Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp">Название предприятия</span></span></label></div><p class="mf-c chk"><i class="y"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p>Всё заполнено, ошибок нет.</p></figure></div>
+        <div class="sgrid"><figure class="st "><figcaption><span>01</span>Пустая форма</figcaption><div class="mfw"><div class="mf" aria-hidden="true"><p class="mf-t">Оставьте заявку</p><div class="mf-f"><div class="mf-i"><span class="mf-lb">Имя</span><span class="fld"><span class="fp">Как к вам обращаться</span></span></div><div class="mf-i"><span class="mf-lb">Телефон</span><span class="fld"><span class="fp"><span class="od">+7 000 000-00-00</span><span class="om">+7 000 000 00 00</span></span></span></div><div class="mf-i"><span class="mf-lb">Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp"><span class="od">Название предприятия</span><span class="om">Название</span></span></span></div></div><p class="mf-c"><i></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec od-f">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p class="mf-call" aria-hidden="true">Готовы обсудить сейчас?<br><b>Звоните +7 000 000 00 00</b></p></div><p class="st-d">Все поля с подсказками, кнопка активна сразу.</p></figure><figure class="st err"><figcaption><span>02</span>Неполный номер</figcaption><div class="mfw"><div class="mf" aria-hidden="true"><p class="mf-t">Оставьте заявку</p><div class="mf-f"><div class="mf-i"><span class="mf-lb">Имя</span><span class="fld"><span class="fv">Лада</span></span></div><div class="mf-i"><span class="mf-lb">Телефон</span><span class="fld err"><span class="fv">+7 925 134</span><small><span class="od">Введите номер полностью</span><span class="om">Введите 11 цифр</span></small></span></div><div class="mf-i"><span class="mf-lb">Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp"><span class="od">Название предприятия</span><span class="om">Название</span></span></span></div></div><p class="mf-c"><i></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec od-f">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p class="mf-call" aria-hidden="true">Готовы обсудить сейчас?<br><b>Звоните +7 000 000 00 00</b></p></div><p class="st-d">Поле подсвечено, а рядом написано, что исправить.</p></figure><figure class="st err"><figcaption><span>03</span>Нет согласия</figcaption><div class="mfw"><div class="mf" aria-hidden="true"><p class="mf-t">Оставьте заявку</p><div class="mf-f"><div class="mf-i"><span class="mf-lb">Имя</span><span class="fld"><span class="fv">Лада</span></span></div><div class="mf-i"><span class="mf-lb">Телефон</span><span class="fld"><span class="fv">+7 925 134 80 41</span></span></div><div class="mf-i"><span class="mf-lb">Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp"><span class="od">Название предприятия</span><span class="om">Название</span></span></span></div></div><p class="mf-c"><i class="e"></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><p class=mf-e>Подтвердите согласие</p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec od-f">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p class="mf-call" aria-hidden="true">Готовы обсудить сейчас?<br><b>Звоните +7 000 000 00 00</b></p></div><p class="st-d">Чекбокс подсвечен, под ним — подсказка.</p></figure><figure class="st "><figcaption><span>04</span>Готово к отправке</figcaption><div class="mfw"><div class="mf" aria-hidden="true"><p class="mf-t">Оставьте заявку</p><div class="mf-f"><div class="mf-i"><span class="mf-lb">Имя</span><span class="fld"><span class="fv">Лада</span></span></div><div class="mf-i"><span class="mf-lb">Телефон</span><span class="fld"><span class="fv">+7 925 134 80 41</span></span></div><div class="mf-i"><span class="mf-lb">Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp"><span class="od">Название предприятия</span><span class="om">Название</span></span></span></div></div><p class="mf-c"><i class="y"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue">Получить консультацию</span><span class="btn btn-sec od-f">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p class="mf-call" aria-hidden="true">Готовы обсудить сейчас?<br><b>Звоните +7 000 000 00 00</b></p></div><p class="st-d">Всё заполнено, ошибок нет.</p></figure></div>
       </div>
       <div>
         <h4>После нажатия кнопки</h4>
-        <div class="sgrid"><figure class="st "><figcaption><span>05</span>Отправляем…</figcaption><div class="mf" aria-hidden="true"><div class="mf-f"><label>Имя<span class="fld"><span class="fv">Лада</span></span></label><label>Телефон<span class="fld"><span class="fv">+7 925 134-80-41</span></span></label><label><span>Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp">Название предприятия</span></span></label></div><p class="mf-c chk"><i class="y"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue is-busy">Отправляем…</span><span class="btn btn-sec">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p>Кнопка показывает, что запрос ушёл, — повторно её не нажать.</p></figure><figure class="st ok"><figcaption><span>06</span>Заявка отправлена</figcaption><div class="mf mf-sent" aria-hidden="true"><div class="ok-ic"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="ok-t">Заявка отправлена</p><p class="ok-s">Свяжемся с вами по указанному номеру в течение часа и договоримся о консультации.</p></div><p>Подтверждение с понятным следующим шагом.</p></figure></div>
+        <div class="sgrid"><figure class="st "><figcaption><span>05</span>Отправляем…</figcaption><div class="mfw"><div class="mf" aria-hidden="true"><p class="mf-t">Оставьте заявку</p><div class="mf-f"><div class="mf-i"><span class="mf-lb">Имя</span><span class="fld"><span class="fv">Лада</span></span></div><div class="mf-i"><span class="mf-lb">Телефон</span><span class="fld"><span class="fv">+7 925 134 80 41</span></span></div><div class="mf-i"><span class="mf-lb">Компания <span class="opt">необязательно</span></span><span class="fld"><span class="fp"><span class="od">Название предприятия</span><span class="om">Название</span></span></span></div></div><p class="mf-c"><i class="y"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Нажимая кнопку, вы соглашаетесь с <u>политикой конфиденциальности</u></span></p><div class="mf-b"><span class="btn btn-blue is-busy">Отправляем…</span><span class="btn btn-sec od-f">Готовы обсудить сейчас? Звоните +7 000 000-00-00</span></div></div><p class="mf-call" aria-hidden="true">Готовы обсудить сейчас?<br><b>Звоните +7 000 000 00 00</b></p></div><p class="st-d">Кнопка показывает, что запрос ушёл, — повторно её не нажать.</p></figure><figure class="st ok"><figcaption><span>06</span>Заявка отправлена</figcaption><div class="mfw"><div class="sent" aria-hidden="true"><div class="sent-card"><span class="sent-x">×</span><div class="ok-ic"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="ok-t">Заявка отправлена</p><p class="ok-s">Свяжемся с вами по указанному номеру в течение часа и договоримся о консультации.</p></div></div></div><p class="st-d">Подтверждение с понятным следующим шагом.</p></figure></div>
       </div>
     </div>
+  </div>
   </div>
 
   <div class="part">
@@ -717,8 +756,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
     <h3>Основа</h3>
     <div class="found">
       <div class="box">
-        <p class="cap-s">Цвет</p>
-        <h4>У каждого цвета — одна роль</h4>
+        <p class="cap-s">Цвет · у каждого одна роль</p>
         <ul class="sw">
           <li><i style="background:#00ACF9"></i><code>#00ACF9</code><span>действие / акцент / система</span></li>
           <li><i style="background:#121212"></i><code>#121212</code><span>секции «решения»</span></li>
@@ -784,24 +822,24 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   </div>
 
   <div class="result dark">
-    <h3>Итог: лендинг готов, но не запущен</h3>
-    <div class="lead"><p>Страница прошла путь от анализа до кликабельного прототипа, но в публикацию не вышла: компания сменила приоритеты. Данных о заявках нет — поэтому вот как я оценила бы результат.</p></div>
-    <div class="pair">
-      <div class="glass">
-        <span><span class="pill blue">Что измеряла бы после запуска</span></span>
+    <h3>Итог: лендинг готов, но&nbsp;не&nbsp;запущен</h3>
+    <p class="r-lead">Прошла путь от&nbsp;анализа до&nbsp;кликабельного прототипа, но&nbsp;в&nbsp;публикацию страница не&nbsp;вышла: компания сменила приоритеты. Данных о&nbsp;заявках нет, поэтому вот как я&nbsp;оценила&nbsp;бы результат.</p>
+    <div class="r-grid">
+      <details class="acc" open>
+        <summary><span>Что измеряла&nbsp;бы после запуска</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
         <ol>
-          <li><h4>[1] Доля «подготовленных» заявок</h4><p>Клиент на консультации уже понимает, что получит, — критерий успеха из блока 1</p></li>
-          <li><h4>[2] Конверсия в заявку</h4><p>Сколько посетителей отправляет форму</p></li>
-          <li><h4>[3] Глубина прокрутки до формы</h4><p>Работает ли путь «вопрос → блок»</p></li>
+          <li><b>Долю «подготовленных» заявок</b>&nbsp;— клиент приходит на&nbsp;консультацию, уже понимая, что получит</li>
+          <li><b>Конверсию в&nbsp;заявку</b>&nbsp;— сколько посетителей отправляет форму</li>
+          <li><b>Глубину прокрутки до&nbsp;формы</b>&nbsp;— работает&nbsp;ли путь «вопрос → блок»</li>
         </ol>
-      </div>
-      <div class="glass">
-        <span><span class="pill blue">Что сделала бы иначе</span></span>
+      </details>
+      <details class="acc" open>
+        <summary><span>Что сделала&nbsp;бы иначе</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
         <ol>
-          <li><h4>[1] Поговорила бы с клиентами до текстов</h4><p>Проблемы собраны со слов двух экспертов — я бы проверила формулировки с покупателями</p></li>
-          <li><h4>[2] Проверила бы структуру на вайрфрейме</h4><p>Порядок блоков дешевле менять на сером каркасе, чем в готовом дизайне</p></li>
+          <li><b>Поговорила&nbsp;бы с&nbsp;клиентами до&nbsp;текстов</b>&nbsp;— проблемы собраны со&nbsp;слов двух экспертов</li>
+          <li><b>Проверила&nbsp;бы структуру на&nbsp;вайрфрейме</b>&nbsp;— порядок блоков дешевле менять на&nbsp;сером каркасе</li>
         </ol>
-      </div>
+      </details>
     </div>
   </div>
 </section>
@@ -834,6 +872,9 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   }
   var t; window.addEventListener('scroll', function () { cancelAnimationFrame(t); t = requestAnimationFrame(update); }, { passive: true });
   update();
+
+  /* Result: accordions start closed on phones */
+  if (window.matchMedia('(max-width: 760px)').matches) document.querySelectorAll('.acc').forEach(function (d) { d.open = false; });
 
   /* Desktop: show the mobile prototype inside a phone frame; phones open it directly */
   var d = document.getElementById('pv'), f = d && d.querySelector('iframe');
