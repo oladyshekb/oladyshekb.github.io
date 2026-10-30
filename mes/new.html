@@ -186,20 +186,22 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .wf.form { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 7px; }
 .wf.form i:last-child { grid-column: 1 / -1; }
 
-.ways { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.ways { margin-top: 28px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .way { container-type: inline-size; border-radius: var(--r-card); padding: 36px 32px; display: grid; gap: 14px; align-content: start; }
 .way.d { background-color: #151618; background-image: linear-gradient(150deg, #151618 0%, #151618 40%, #0F3247 100%); color: var(--on-dark-2); }
 .way.d h3 { color: #fff; }
 .way.l { background: var(--panel); border: 1px solid var(--ink); }
 .way .head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .flow { margin-top: 18px; display: flex; flex-wrap: nowrap; align-items: center; }
-.flow span { flex: 0 0 auto; height: 44px; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 13px; border: 1px solid var(--ink); background: #fff; color: var(--ink); font-size: 15px; white-space: nowrap; }
+.flow span { flex: 0 1 200px; min-width: 0; justify-content: center; text-align: center; }
+.flow span { height: 48px; display: inline-flex; align-items: center; padding: 0 10px; border-radius: 13px; border: 1px solid var(--ink); background: #fff; color: var(--ink); font-size: 16px; white-space: nowrap; }
 .way.d .flow span { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.3); color: #fff; }
 .flow span.go { background: var(--blue); border-color: var(--blue); color: #fff; }
-.flow s { flex: 1 0 6px; max-width: 24px; height: 1px; background: var(--blue); text-decoration: none; }
-@container (max-width: 370px) {
-  .flow { flex-direction: column; align-items: flex-start; }
-  .flow s { flex: 0 0 14px; width: 1px; max-width: none; height: 14px; margin-left: 22px; }
+.flow s { flex: 0 0 14px; height: 1px; background: var(--blue); text-decoration: none; }
+@container (max-width: 380px) {
+  .flow { flex-direction: column; align-items: stretch; }
+  .flow span { flex: 0 0 auto; width: 100%; }
+  .flow s { flex: 0 0 14px; width: 1px; height: 14px; align-self: center; }
 }
 
 /* Solution */
@@ -207,8 +209,8 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
 .shot img, .shots img { border-radius: 20px; width: 100%; }
 .cap { margin-top: 20px; display: grid; gap: 8px; max-width: 64ch; }
 .shots { margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px 24px; align-items: start; }
-.chain { margin-top: 28px; display: grid; grid-template-columns: auto 1fr auto 1fr auto 1fr auto; align-items: center; }
-.chain span { height: 54px; display: inline-flex; align-items: center; padding: 0 26px; border-radius: 16px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); color: #fff; font-size: 18px; white-space: nowrap; }
+.chain { margin-top: 28px; display: grid; grid-template-columns: minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr); align-items: center; }
+.chain span { height: 54px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 12px; border-radius: 16px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); color: #fff; font-size: 18px; white-space: nowrap; }
 .chain span.go { background: var(--blue); border-color: var(--blue); }
 .chain s { height: 1px; background: rgba(255,255,255,.3); }
 .objs { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -373,8 +375,7 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .cover { display: flex; flex-direction: column; }
   .map { grid-template-columns: 1fr; }
   .schema { display: none; }
-  .chain { grid-template-columns: auto 1fr auto; row-gap: 12px; }
-  .chain s:nth-of-type(2) { display: none; }
+  .chain span { font-size: 16px; }
 }
 
 /* Phone */
@@ -441,14 +442,14 @@ h4, .h4 { font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--ink
   .dots .lbl { display: inline; font-size: 13px; color: var(--muted); }
   .dot { width: 14px; height: 14px; }
 
-  .flow span { height: 44px; padding: 0 16px; font-size: 15px; }
+  .flow span { height: 48px; font-size: 16px; }
 
   .shot { margin-top: 24px; }
   .shots { gap: 28px; }
   .shot img, .shots img { border-radius: 14px; }
-  .chain { grid-template-columns: 1fr; justify-items: start; row-gap: 0; }
-  .chain s, .chain s:nth-of-type(2) { display: block; width: 1px; height: 14px; margin-left: 24px; }
-  .chain span { height: 46px; font-size: 16px; }
+  .chain { grid-template-columns: minmax(0,1fr); justify-items: stretch; row-gap: 0; }
+  .chain s { display: block; width: 1px; height: 14px; justify-self: center; }
+  .chain span { height: 48px; font-size: 16px; }
   .objs { grid-template-columns: repeat(3, 72%); overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin-right: calc(var(--pad) * -1); padding-right: var(--pad); scrollbar-width: none; }
   .objs::-webkit-scrollbar { display: none; }
   .objs figure { scroll-snap-align: start; }
